@@ -1,0 +1,97 @@
+
+{% args req %}
+<html>
+    <head>
+        <title>PyKiln Status</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <style>
+            h1   {font-weight: 600;}
+            h2   {color: #aaa; font-weight: 600;}
+            h3   {color: #aaa; font-weight: 600;}
+            p    {margin: 2 0 2 0;}
+            ul   {margin-top: 0; padding-left: 15;}
+            body {background-color: #7a7a7a; color: #222; font-family: Arial, Helvetica, sans-serif; margin: 20px;}
+
+            table{border-collapse:collapse; width: 75%; box-shadow: 2px 5px 5px rgba(0,0,0,0.3);}
+            td{padding:16px; width:1%; white-space: nowrap;}
+            tr{background: #fbfbfb;}
+            tr:nth-child(odd){background: #fbfbfb;}
+            tr:nth-child(even){background: #fff;}
+            tr:first-child{background:#6d7ae0; color:#fff; font-weight: 600; width:1%; white-space: nowrap;}
+            td:nth-child(1) {padding-left: 20px;}
+            td:nth-child(0) {width:1%; white-space: nowrap;}
+            td:last-child {padding-right: 20px; width: initial;}
+            
+            .center{margin: 0 auto 30px auto;}
+            .tcenter{text-align: center;}
+            .state{border-radius: 8px; color:#fff; background:#19b63a; font-weight: 600; padding:5px}
+            .bad{background:#be1723;}
+        </style>
+
+    </head>
+    <body>
+        Request path: '{{req.path}}'<br>
+        <img height="50px" src="data:image/svg+xml;base64,PHN2ZyBhcmlhLWhpZGRlbj0idHJ1ZSIgZm9jdXNhYmxlPSJmYWxzZSIgZGF0YS1wcmVmaXg9ImZhcyIgZGF0YS1pY29uPSJidXJuIiBjbGFzcz0ic3ZnLWlubGluZS0tZmEgZmEtYnVybiBmYS13LTEyIiByb2xlPSJpbWciIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDM4NCA1MTIiPjxwYXRoIGZpbGw9ImN1cnJlbnRDb2xvciIgZD0iTTE5MiAwQzc5LjcgMTAxLjMgMCAyMjAuOSAwIDMwMC41IDAgNDI1IDc5IDUxMiAxOTIgNTEyczE5Mi04NyAxOTItMjExLjVjMC03OS45LTgwLjItMTk5LjYtMTkyLTMwMC41em0wIDQ0OGMtNTYuNSAwLTk2LTM5LTk2LTk0LjggMC0xMy41IDQuNi02MS41IDk2LTE2MS4yIDkxLjQgOTkuNyA5NiAxNDcuNyA5NiAxNjEuMiAwIDU1LjgtMzkuNSA5NC44LTk2IDk0Ljh6Ij48L3BhdGg+PC9zdmc+"/>
+        <h1>PyKiln Status</h1>
+        <h3>Info:</h3>
+        <p>Name: My PyKiln</p>
+        <p>Version: 0.0</p>
+        <p>IP: xxx.xxx.xxx.xxx</p>
+        <p>Timezone: Eastern</p>
+        <p>Uptime: 0:00</p>
+        <p>Online Since: X</p>
+        <p>Units: Fahrenheit</p>
+        <p>Volts: 120</p>
+        <p>Filespace Available: 1.2Mb</p>
+
+        <h3>Self Check:</h3>
+        <ul>
+            <li>Temp1: 70 *F</li>
+            <li>Temp2: Not Connected</li>
+            <li>Temp3: Not Connected</li>
+            <li>Temp4: Not Connected</li>
+            <li>Current Sensor: 0.2 amps</li>
+        </ul>
+
+        <table class="center">
+            <tr><td>TEMPERATURE</td><td>STATUS</td></tr>
+            <tr><td>Sensor 1:</td><td>75*F</td></tr>
+            <tr><td>Sensor 2:</td><td>75*F</td></tr>
+            <tr><td>Sensor 3:</td><td>75*F</td></tr>
+            <tr><td>Sensor 4:</td><td><span class="state bad">NOT CONNECTED</span></td></tr>
+        </table>
+
+        <table class="center">
+            <tr><td>RELAYS</td><td>STATUS</td></tr>
+            <tr><td>Contactor:</td><td><span class="state">OK</span></td></tr>
+            <tr><td>Relay 1:</td><td><span class="state">OK</span></td></tr>
+            <tr><td>Relay 2:</td><td><span class="state">OK</span></td></tr>
+            <tr><td>Relay 3:</td><td><span class="state">OK</span></td></tr>
+            <tr><td>Relay 4:</td><td><span class="state">OK</span></td></tr>
+            <tr><td>Relay 5:</td><td><span class="state">OK</span></td></tr>
+            <tr><td>Relay 6:</td><td><span class="state bad">FAILED</span></td></tr>
+        </table>
+
+        <form action="/api/speaker" method="post" target="hidden-iframe">
+            <input type="submit" name="Test Piezo Speaker" value="Test Piezo Speaker"/>
+        </form>
+        <form action="/api/led" method="post" target="hidden-iframe">
+            <input type="submit" name="Test RGB LED" value="Test RGB LED"/>
+        </form>
+
+        <form action="/api/temperature" method="get" target="hidden-iframe">
+            <input type="submit" name="Get Temperature" value="Get Temperature"/>
+        </form>
+
+        <form action="/api/reboot" method="post" target="hidden-iframe">
+            <input type="submit" name="Reboot" value="Reboot"/>
+        </form>
+
+        <iframe name="hidden-iframe" style="display:none;"></iframe>
+        
+        <h3>Errors:</h3>
+        <p>This is where the errors would go</p>
+
+        
+    </body>
+</html>

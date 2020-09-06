@@ -1,0 +1,66 @@
+
+{% args req %}
+<html>
+    <head>
+        <title>PyKiln Status</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <style>
+            h1   {font-weight: 600;}
+            h2   {color: #aaa; font-weight: 600;}
+            h3   {color: #aaa; font-weight: 600;}
+            p    {margin: 2 0 2 0;}
+            ul   {margin-top: 0; padding-left: 15;}
+            body {background-color: #222; color: #fff; font-family: Arial, Helvetica, sans-serif; margin: 20px;}
+        </style>
+    </head>
+    <body>
+        Request path: '{{req.path}}'<br>
+        <h1>PyKiln Status</h1>
+        <h3>Info:</h3>
+        <p>Name: My PyKiln</p>
+        <p>Version: 0.0</p>
+        <p>IP: xxx.xxx.xxx.xxx</p>
+        <p>Timezone: Eastern</p>
+        <p>Uptime: 0:00</p>
+        <p>Online Since: X</p>
+        <p>Units: Fahrenheit</p>
+        <p>Volts: 120</p>
+        <p>Filespace Available: 1.2Mb</p>
+
+        <h3>Self Check:</h3>
+        <ul>
+            <li>Temp1: 70 *F</li>
+            <li>Temp2: Not Connected</li>
+            <li>Temp3: Not Connected</li>
+            <li>Temp4: Not Connected</li>
+            <li>Current Sensor: 0.2 amps</li>
+            <li>Contactor: OK</li>
+            <li>Relay 1: OK</li>
+            <li>Relay 2: OK</li>
+            <li>Relay 3: OK</li>
+            <li>Relay 4: OK</li>
+            <li>Relay 5: OK</li>
+            <li>Relay 6: OK</li>
+        </ul>
+
+        <form action="http://192.168.50.98/api/speaker" method="post" target="hidden-iframe">
+            <input type="submit" name="Test Piezo Speaker" value="Test Piezo Speaker"/>
+        </form>
+        <form action="http://192.168.50.98/api/led" method="post" target="hidden-iframe">
+            <input type="submit" name="Test RGB LED" value="Test RGB LED"/>
+        </form>
+
+        <form action="http://192.168.50.98/api/temperature" method="get" target="hidden-iframe">
+            <input type="submit" name="Get Temperature" value="Get Temperature"/>
+        </form>
+
+        <form action="http://192.168.50.98/api/reboot" method="post" target="hidden-iframe">
+            <input type="submit" name="Reboot" value="Reboot"/>
+        </form>
+
+        <iframe name="hidden-iframe" style="display:none;"></iframe>
+        
+        <h3>Errors:</h3>
+        <p>This is where the errors would go</p>
+    </body>
+</html>
