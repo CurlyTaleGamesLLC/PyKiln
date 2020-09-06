@@ -1,33 +1,60 @@
-.hidden{
-    visibility:hidden;
+.schedule-header{
+    font-size: .4em;
 }
 
-.gray{
-    -webkit-filter: grayscale(100%);
-    filter: grayscale(100%);
+.schedule{
+    font-size: 1.4em;
 }
 
-.vhidden{
-    visibility: hidden;
+body { padding-right: 0 !important }
+.modal { padding-right: 0 !important }
+
+table {
+    counter-reset: rowCounter;
+    border-collapse: collapse;
 }
 
+tr td:first-child {
+    counter-increment: rowCounter;
+}
 
-/* Sticky footer styles
--------------------------------------------------- */
-html {
-    position: relative;
-    min-height: 100%;
-  }
-  body {
-    margin-bottom: 200px; /* Margin bottom by footer height */
-  }
-  .footer {
-    position: absolute;
-    bottom: 0;
+.cone-row td:nth-child(3),
+.cone-row th:nth-child(3),
+.cone-row td:nth-child(5),
+.cone-row th:nth-child(5){
+    display: none;
+}
+
+td:first-child::before {
+    content: counter(rowCounter);
+}
+
+@media(max-width: 767px) {
+    .full-width-small {
+        width: 100%;  
+    }
+}
+
+.current-segment{
+    background-color: #007bff !important;
+}
+
+canvas {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+.list-group{
+    padding-right: 0;
+}
+
+.btn-responsive{
+    /* font-size: 90%; */
+}
+
+.progress{
+    margin-left:15px;
+    margin-right:15px;
     width: 100%;
-    height: 200px; /* Set the fixed height of the footer here */
-  }
-
-.modal-lg {
-    max-width: 90%;
 }

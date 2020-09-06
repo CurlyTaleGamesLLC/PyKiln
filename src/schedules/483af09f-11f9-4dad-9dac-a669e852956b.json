@@ -1,0 +1,32 @@
+{
+    "name":"Porcelain (Cone 7)",
+    "path":"483af09f-11f9-4dad-9dac-a669e852956b.json",
+    "segments":[
+        {
+            "hold":120,
+            "rate":50,
+            "temp":200
+        },
+        {
+            "hold":60,
+            "rate":100,
+            "temp":800
+        },
+        {
+            "hold":60,
+            "rate":100,
+            "temp":2262
+        },
+        {
+            "hold":5,
+            "rate":100,
+            "temp":200
+        },
+        {
+            "hold":5,
+            "rate":100,
+            "temp":100
+        }
+    ],
+    "units":"fahrenheit"
+}

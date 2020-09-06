@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en" class="h-100">
+
+{% with title="Settings" %}
+{% include 'head.html' %}
+{% endwith %}
+
+<body class="d-flex flex-column h-100">
+    
+    {% include 'nav.html' %}
+
+    <main role="main" class="flex-shrink-0 mb-4">
+        <div class="container">
+            <form id="form-settings">
+                <h2>Settings</h2>
+                <div class="form-group">
+
+                    <!--Temperature-->
+                    <div class="row">
+                        <div class="col-12 mt-2">
+                            <h5><i class="fas fa-thermometer-half"></i> Temperature</h5>
+                            <label for="units">Default Units</label>
+                            <div>
+                                <input type="checkbox" id="units-setting" name="units" checked data-toggle="toggle" data-on="Fahrenheit" data-off="Celsius" data-onstyle="warning" data-offstyle="info">
+                            </div>
+                            
+                        </div>
+                    </div>
+
+                    <!--Max Temperature-->
+                    <div class="form-group mt-3">
+                        <label class="degrees" for="maxTemp">Alarm Max Temperature <span id="max-temp-degrees"></span></label>
+                        <input type="number" min="1" max="3000" class="form-control" name="max-temp" id="max-temp" aria-describedby="max-temp" placeholder="2500">
+                        <small id="maxTempHelp" class="form-text text-muted">Shuts off kiln if temperature exceeded</small>
+                    </div>
+
+                    <!--Thermocouple Offset-->
+                    <div class="form-group mt-3">
+                        <label class="degrees" for="maxTemp">Thermocouple Offset <span id="offset-temp-degrees"></span></label>
+                        <input type="number" min="-1000" max="1000" class="form-control" name="offset-temp" id="offset-temp" aria-describedby="offset-temp" placeholder="0">
+                        <small id="offsetTempHelp" class="form-text text-muted">Thermocouples can be +/- 5 degrees off. Put your thermocouple in ice water and enter measured the temperature here to compensate for error.</small>
+                    </div>
+
+                    <!--Electricity Cost-->
+                    <h5><i class="fas fa-bolt"></i> Electrical</h5>
+                    <div class="form-group mt-1">
+                            <label for="volts">Kiln Voltage</label>
+                            <input type="number" step="1" class="form-control" name="volts" id="volts" placeholder="220">
+                            <small id="voltsHelp" class="form-text text-muted">Measure your mains voltage usually 110 or 220 volts for USA/Canada</small>
+                        </div>
+                    <div class="form-group mt-1">
+                        <label for="maxTemp">Electricity Cost Per Kilowatt</label>
+                        <input type="number" step="0.01" class="form-control" name="cost" id="cost" placeholder="0.14">
+                    </div>
+                </div>
+
+                <h5 class="mt-4"><i class="fas fa-envelope"></i> Notifications</h5>
+                <p>Get email updates when your firing has completed, or if your kiln has any thermal errors.</p>
+                <p>I highly recommend you create a new gmail address specifically for notifications. Once you do <a href="https://www.google.com/settings/security/lesssecureapps">enable less secure login</a> as well as <a href="https://accounts.google.com/DisplayUnlockCaptcha">disabled recaptcha.</a></p>
+
+                <!--Enable Notifications-->
+                <div class="row mt-2 mb-3">
+                    <div class="col-12">
+                            <!-- <input type="checkbox" name="units" checked data-toggle="toggle" data-on="Fahrenheit" data-off="Celsius" data-onstyle="warning" data-offstyle="info"> -->
+                            <input type="checkbox" name="enable-email" id="toggle-email" data-toggle="toggle" data-on="Enabled" data-off="Disabled">
+                    </div>
+                    <script> 
+                        $(function() { 
+                            $('#toggle-email').change(function() { 
+                                $('#email-form').collapse($(this).prop('checked') ? "show" : "hide")
+                            }) 
+                        }) 
+                    </script>
+
+                </div>
+
+                <!--Sender Email and Password-->
+                <div id="email-form" class="collapse">
+                <div class="row">
+                    <div class="form-group col-6">
+                        <label for="sender">Sender Email Address</label>
+                        <input type="email" class="form-control" id="sender" name="sender" aria-describedby="senderEmailNote" placeholder="Enter email">
+                        <small id="senderEmailNote" class="form-text text-muted">This must be a GMAIL address</small>
+                    </div>
+                    <div class="form-group col-6">
+                        <label for="sender-password">Sender Password</label>
+                        <input type="password" class="form-control" id="sender-password" name="sender-password" placeholder="Password">
+                    </div>
+                </div>
+
+                <!--Receiver Email-->
+                <div class="form-group">
+                    <label for="receiver">Receiver Email Address</label>
+                    <input type="email" class="form-control" id="receiver" name="receiver" placeholder="Enter email">
+                </div>
+                </div>
+
+                <!--Timezone-->
+                <h5 class="mt-4"><i class="fas fa-clock"></i> Time</h5>
+                <label for="timezone">Timezone:</label>
+                <select class="custom-select" id="timezone" name="timezone">
+                    <option selected>Select Timezone</option>
+                    {% include 'timezones.html' %}
+                </select>
+
+                <!--<button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Settings</button>-->
+                
+                <h5 class="mt-4"><i class="fas fa-flask"></i> Experimental</h5>
+                <!--Receiver Email-->
+                <div class="form-group">
+                    <label for="receiver">Vent Blower Fan (GPIO 17)</label>
+                    <div><input type="checkbox" id="toggle-fan" data-toggle="toggle" data-on="Enabled" data-off="Disabled"></div>
+                    <small id="fanHelp" class="form-text text-muted">This currently isn't implemented</small>
+
+                    
+                </div>
+
+
+            </form>
+            <button id="btn-save-settings" class="btn btn-primary"><i class="fas fa-save"></i> Save Settings</button>
+
+            <div id="alert-container"></div>
+            
+
+        </div>
+    </main>
+
+    {% include 'footer.html' %}
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            console.log( "document loaded" );
+            LoadSettings();
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en" class="h-100">
+
+{% with title="Logging" %}
+{% include 'head.html' %}
+{% endwith %}
+
+<body class="d-flex flex-column h-100">
+    {% include 'nav.html' %}
+
+    <main role="main" class="flex-shrink-0 mb-4">
+        <div class="container">
+            <div class="row">
+                <h2 class="col-12">Most Recent Firing</h2>
+                <div class="col-12">
+                    <label for="timezone">11/21/2019 1:00PM - Celadon Blue</label>
+                    <canvas id="canvas"></canvas>
+                   
+                </div>
+            </div>
+            <div class="row mt-4">
+                <h4 class="col-12">Kiln Totals</h4>
+            
+                <ul class="list-group col-12" id="kiln-totals">
+                    <li class="list-group-item"><b>Fires:</b> <span id="log-fires">0</span></li>
+                    <li class="list-group-item"><b>Time Firing:</b> <span id="log-time">0</span></li>
+                    <li class="list-group-item"><b>Cost:</b> <span id="log-cost">0</span></li>
+                </ul>
+            </div>
+            
+            </div>
+       
+    </main>
+
+    <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+
+
+    {% include 'footer.html' %}
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            console.log( "document loaded" );
+            GetTotals();
+        });
+    </script>
+
+</body>
+
+</html>
