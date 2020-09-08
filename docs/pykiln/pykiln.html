@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en" class="h-100">
+
+<head>
+
+    <title>PyKiln</title>
+      
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="favicon.ico">
+    
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    
+    <!--Vue 2.6-->
+    <script src="js/vue.js"></script>
+    <script src="js/axios.min.js"></script>
+    
+    <!--Bootstrap + JQuery-->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!--link rel="stylesheet" href="css/bootstrap.min.slate.css">-->
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    
+    
+    <!--Font Awesome-->
+    <link href="css/all.min.css" rel="stylesheet">
+    
+    <!--ChartJS-->
+    <script src="js/moment.min.js"></script>
+    <script src="js/Chart.min.js"></script>
+    <script src="js/utils.js"></script>
+    
+    <script src="js/charts.js"></script>
+    
+    
+    <!--PiKiln JS and CSS-->
+    <script src="components/navbar.js"></script>
+    <script src="components/modal.js"></script>
+    <script src="components/heading.js"></script>
+    <script src="components/settingsinput.js"></script>
+    <!-- <link rel="stylesheet" href="css/styles.css"> -->
+    <link rel="stylesheet" href="css/styles2.css">
+    
+    </head>
+
+<body class="d-flex flex-column h-100">
+
+<div class="main-container" id="app">
+    <navbar title="PyKiln" v-on:custom="pageSelect"></navbar>
+
+    <main role="main" class="flex-shrink-0">
+        <div class="container">
+
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#start-confirm-modal">Launch demo modal</button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#stop-confirm-modal">Launch DANGER modal</button>
+            <div class="kiln-base">
+                <img class="kiln-zones" src="imgs/kiln-base.svg">
+                <img class="kiln-zones" v-bind:src="'imgs/kiln-zones-' + settings.zones + '.svg'">
+                <img class="kiln-temp" v-bind:src="'imgs/kiln-temp-' + settings.sensors + '.svg'">
+            </div>
+
+
+            <div v-if="pages.current == 'settings'">
+                <heading title="Settings"></heading>
+                <div class="row">
+                    <settingsinput v-if="settings.updated" ref="volts" v-bind:value.sync="settings.volts" name="Kiln Voltage" icon="fa-bolt" label="Measure your mains voltage, usually 110 or 220 volts for USA/Canada" type="number" step="1"></settingsinput>
+                    <settingsinput v-if="settings.updated" ref="cost" v-bind:value.sync="settings.cost" name="Cost Per Kilowatt" icon="fa-dollar-sign" type="number" step="0.01"></settingsinput>
+                </div>
+                <heading title="Notifications"></heading>
+                <div class="row">
+                    <settingsinput v-if="settings.updated" v-bind:value.sync="settings.email" name="Email Address" icon="fa-at" type="text"></settingsinput>
+                </div>
+                <!-- too much custom stuff, get rid of the components -->
+            </div>
+
+        </div>
+    </main>
+
+
+    <!-- Modals -->
+    <modal modalid="start-confirm-modal" modaltitle="Start Firing Schedule?" modalbody="" modalbutton="<i class='fas fa-burn'></i> Start Schedule" buttonclass="btn-primary" v-on:confirm="test"></modal>
+    <modal modalid="stop-confirm-modal" modaltitle="Stop Firing Schedule?" modalbody="" modalbutton="<i class='fas fa-ban'></i> Stop Schedule" buttonclass="btn-danger" v-on:confirm="test"></modal>
+
+</div>
+
+<footer class="footer mt-auto py-3 bg-light">
+    <div class="container text-center">
+        <span class="text-muted">This is not a commercial product, use this software at your own risk.</span>
+    </div>
+</footer>
+
+<!-- <script src="js/pikiln-scripts.js"></script> -->
+<script src="js/pykiln-vue.js"></script>
+
+</body>
+
+</html>

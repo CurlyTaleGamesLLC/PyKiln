@@ -58,3 +58,26 @@ canvas {
     margin-right:15px;
     width: 100%;
 }
+
+[v-cloak] { display: none; }
+
+.parent {
+    position: relative;
+    top: 0;
+    left: 0;
+  }
+  .image1 {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+  .image2 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+
+
+  

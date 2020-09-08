@@ -1,1 +1,1 @@
-py -3 .\serv.py
+C:\Users\Ben\AppData\Local\Programs\Python\Python38\python.exe .\serv.py

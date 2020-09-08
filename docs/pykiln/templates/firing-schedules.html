@@ -5,6 +5,7 @@
 {% endwith %}
 
 <body class="d-flex flex-column h-100">
+  <div class="main-container" id="app">
   {% include 'nav.html' %}
 
   <main role="main" class="flex-shrink-0">
@@ -13,22 +14,20 @@
         <div class="row">
           <div class="col-12">
             <h2>Edit Firing Schedule:</h2>
-            <select class="custom-select" id="fireScheduleList" name="fireScheduleList">
-              <option selected>Select Schedule</option>
-            </select>
+            <select id="fireScheduleList" class="custom-select" @change="onScheduleSelect($event)">
+                <option value="select-schedule" selected>Select Schedule</option>';
+                <option v-for="option in scheduleList" v-bind:value="option.path">[[ option.name ]]</option>
+              </select>
           </div>
         </div>
-
-        
 
         <!--add rows and delete firing schedule-->
         <div class="row mt-3">
           <div class="col-md-12">
-            <button id="btn-create-schedule" class="btn btn-primary btn-responsive mb-2"><i class="fas fa-file-alt"></i> New Schedule</button>
-            <!-- TO DO: Add the ability to Duplicate existing schedules -->
-            <button id="btn-duplicate-schedule" class="btn btn-light btn-responsive mb-2"><i class="fas fa-copy"></i><span class="d-none d-sm-inline"> Duplicate</span></button>
+            <button id="btn-create-schedule" class="btn btn-primary btn-responsive mb-2" v-on:click="onScheduleCreateNew"><i class="fas fa-file-alt"></i> New Schedule</button>
+            <button id="btn-duplicate-schedule" class="btn btn-light btn-responsive mb-2" v-on:click="onScheduleDuplicate"><i class="fas fa-copy"></i><span class="d-none d-sm-inline"> Duplicate</span></button>
             <button id="btn-import-schedule" class="btn btn-light btn-responsive mb-2"><i class="fas fa-file-upload"></i><span class="d-none d-sm-inline"> Import</span></button>
-            <button id="btn-download-schedule" class="btn btn-light btn-responsive mb-2"><i class="fas fa-file-download"></i><span class="d-none d-sm-inline"> Export</span></button>
+            <button id="btn-download-schedule" class="btn btn-light btn-responsive mb-2" v-on:click="onScheduleDownload"><i class="fas fa-file-download"></i><span class="d-none d-sm-inline"> Export</span></button>
             
 
             <form id="importForm" enctype="multipart/form-data" class="d-none">
@@ -39,24 +38,11 @@
           </div>
         </div>
 
-        <script>
-            importForm.onsubmit = async (e) => {
-              e.preventDefault();
-          
-              let response = await fetch('/api/import-schedule', {
-                method: 'POST',
-                body: new FormData(importForm)
-              });
-          
-              let result = await response.json();
-              location.reload();
-              //alert(result.message);
-            };
-          </script>
+        
 
-      <div id="schedule-group" class="d-none">
+      <div id="schedule-group" v-bind:class="{'d-none':(schedule.path === '')}">
 
-      <h2 class="mb-3 mt-3" contenteditable="true" id="schedule-title">Bisque Fire (Stoneware)</h2>
+      <h2 class="mb-3 mt-3 editme" contenteditable="true" id="schedule-title" @blur="onEditTitle($event)" @keydown.enter="endEdit">[[ schedule.name ]]</h2>
 
       <h5>Firing Schedule</h5>
       <div id="table" class="table-responsive table-editable">
@@ -64,8 +50,8 @@
           <thead>
             <tr class="schedule-header">
               <th>SEG #</th>
-              <th class="degrees">RATE<br>(°C/HOUR)</th>
-              <th class="degrees">TARGET<br>TEMP (°C)</th>
+              <th class="degrees">RATE<br>([[ schedule.units == "fahrenheit" ? "°F" : "°C"]]/HOUR)</th>
+              <th class="degrees">TARGET<br>[[ schedule.units == "fahrenheit" ? "TEMP (°F)" : "TEMP (°C)"]]</th>
               <th>HOLD TIME<br>(MINUTES)</th>
               <th></th>
               <th></th>
@@ -73,14 +59,27 @@
           </thead>
           <tbody id="schedule-body">
             <!--firing segments loaded here-->
+            <tr v-for="(segment, index) in schedule.segments" v-bind:class="{'segment-row' : true, 'current-segment':(index === firing.segment),  'text-light':(index === firing.segment)}">
+                <td></td>
+                <td class="numbersOnly editme" contenteditable="true" @blur="onEdit($event, 'rate', index)" @keydown.enter="endEdit">[[ segment.rate ]]</td>
+                <td class="numbersOnly editme" contenteditable="true" @blur="onEdit($event, 'temp', index)" @keydown.enter="endEdit">[[ segment.temp ]]</td>
+                <td class="numbersOnly editme" contenteditable="true" @blur="onEdit($event, 'hold', index)" @keydown.enter="endEdit">[[ segment.hold ]]</td>
+                <td class="pt-3-half">
+                  <span v-bind:class="{'table-up':true, 'mr-2':true, 'invisible':(index==0)}"><a class="badge badge-secondary" href="#!" v-on:click="move(index,index-1)"><i class="fas fa-long-arrow-alt-up" aria-hidden="true"></i></a></span>
+                  <span v-bind:class="{'table-down':true, 'invisible':(index==(schedule.segments.length-1))}"><a class="badge badge-secondary" href="#!" v-on:click="move(index,index+1)"><i class="fas fa-long-arrow-alt-down" aria-hidden="true"></i></a></span>
+                </td>
+                <td>
+                    <span class="table-remove"><button type="button" class="btn btn-danger btn-rounded btn-sm my-0" v-on:click="remove(index)"><i class="fas fa-trash"></i></button></span>
+                </td>
+            </tr>
           </tbody>
         </table>
       </div>
 
        <!--cost estimates-->
        <ul id="home-estimates" class="list-group col-12 mb-4">
-        <li class="list-group-item"><b>Estimated Time:</b> <span id="home-time">1:00</span></li>
-        <!-- <li class="list-group-item"><b>Estimated Cost:</b> <span id="home-cost">$3.50</span></li> -->
+        <li class="list-group-item"><b>Estimated Time:</b> <span id="home-time">[[ timeEstimate ]]</span></li>
+        <li v-if="schedule.cost" class="list-group-item"><b>Estimated Cost:</b> <span id="home-cost">[[ formatCost(schedule.cost) ]]</span></li>
       </ul>
 
       <!--add rows and delete firing schedule-->
@@ -88,9 +87,9 @@
       <div class="row mt-4">
       
         <div class="col-12">
-        <button id="btn-add-segment" class="btn mb-2 full-width-small btn-success table-add"><i class="fas fa-plus-circle"></i> Add Stage</button>
+        <button id="btn-add-segment" class="btn mb-2 full-width-small btn-success table-add" v-on:click="addRow"><i class="fas fa-plus-circle"></i> Add Stage</button>
 
-        <button id="btn-save-schedule" class="btn mb-2 full-width-small btn-primary"><i class="fas fa-save"></i> Save Schedule</button>
+        <button id="btn-save-schedule" class="btn mb-2 full-width-small btn-primary" v-on:click="onScheduleSave"><i class="fas fa-save"></i> Save Schedule</button>
       
         <button class="btn mb-2 full-width-small btn-light" data-toggle="collapse" data-target="#coneChart" aria-expanded="false" aria-controls="coneChart"><i class="fas fa-table"></i> Cone Chart</button>
 
@@ -114,20 +113,42 @@
     </div>
   </main>
 
+  {% with modalid="delete-confirm-modal", modaltitle="Delete Firing Schedule?", modalbody="", buttonid="btn-delete-schedule", modalbutton="<i class='fas fa-trash'></i> Delete Schedule", modalfunction="onDeleteSchedule" %}
+  {% include 'modal-danger.html' %}
+  {% endwith %}
+
+</div>
   {% include 'footer.html' %}
 
-{% with modalid="delete-confirm-modal", modaltitle="Delete Firing Schedule?", modalbody="", buttonid="btn-delete-schedule", modalbutton="<i class='fas fa-trash'></i> Delete Schedule" %}
-{% include 'modal-danger.html' %}
-{% endwith %}
 
-  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-  <script>
-    $(document).ready(function() {
-        console.log( "document loaded" );
-        LoadSchedules();
-        CelsiusConeChart();
+
+{% include 'footer-scripts.html' %}
+ 
+<script>
+  //Import Schedule Scripts
+    importForm.onsubmit = async (e) => {
+      e.preventDefault();
+  
+      let response = await fetch('/api/import-schedule', {
+        method: 'POST',
+        body: new FormData(importForm)
+      });
+  
+      let result = await response.json();
+      location.reload();
+      //alert(result.message);
+    };
+
+    $('#btn-import-schedule').click(function () {
+      console.log("Import Schedule");
+      $('#import-schedule').click();
     });
-</script>
+
+    //auto submits the schedule import upload
+    $('#import-schedule').on('change', function () {
+      $('#importForm').submit();
+    });
+  </script>
 
 </body>
 

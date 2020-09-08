@@ -6,6 +6,7 @@
 {% endwith %}
 
 <body class="d-flex flex-column h-100">
+    <div class="main-container" id="app">
     {% include 'nav.html' %}
 
     <main role="main" class="flex-shrink-0 mb-4">
@@ -13,7 +14,7 @@
             <div class="row">
                 <h2 class="col-12">Most Recent Firing</h2>
                 <div class="col-12">
-                    <label for="timezone">11/21/2019 1:00PM - Celadon Blue</label>
+                    <label for="timezone">[[ log.startTime + " - " + log.name ]]</label>
                     <canvas id="canvas"></canvas>
                    
                 </div>
@@ -22,9 +23,9 @@
                 <h4 class="col-12">Kiln Totals</h4>
             
                 <ul class="list-group col-12" id="kiln-totals">
-                    <li class="list-group-item"><b>Fires:</b> <span id="log-fires">0</span></li>
-                    <li class="list-group-item"><b>Time Firing:</b> <span id="log-time">0</span></li>
-                    <li class="list-group-item"><b>Cost:</b> <span id="log-cost">0</span></li>
+                    <li class="list-group-item"><b>Fires:</b> <span id="log-fires">[[ totals.fires ]]</span></li>
+                    <li class="list-group-item"><b>Time Firing:</b> <span id="log-time">[[ formatTime(totals.time) ]]</span></li>
+                    <li class="list-group-item"><b>Cost:</b> <span id="log-cost">[[ formatCost(totals.cost) ]]</span></li>
                 </ul>
             </div>
             
@@ -32,18 +33,10 @@
        
     </main>
 
-    <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+</div>
 
-
-    {% include 'footer.html' %}
-
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-    <script>
-        $(document).ready(function() {
-            console.log( "document loaded" );
-            GetTotals();
-        });
-    </script>
+{% include 'footer.html' %}
+{% include 'footer-scripts.html' %}
 
 </body>
 

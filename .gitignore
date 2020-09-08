@@ -147,3 +147,9 @@ dmypy.json
 
 .pylintrc
 .vscode/*
+
+docs/pykiln/imgs/src
+docs/pykiln/css/fontawesome-free-5.11.2-web
+
+
+

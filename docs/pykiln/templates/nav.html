@@ -1,0 +1,54 @@
+<nav class="navbar navbar-expand-lg bg-dark navbar-dark mb-4">
+    
+    <!-- Main Home Button -->
+    <a class="navbar-brand" href="index">PiKiln <i class="fas fa-burn"></i></a>
+
+    <!-- Mobile Temp and Firing Schedule -->
+    <span v-if="Object.keys(cTemp).length !== 0" class="text-light d-lg-none d-xl-none">
+
+        <!-- Average Temperature -->
+        <b class="d-inline-block">
+            <span>[[ cTemp.temp[cTemp.temp.length - 1] ]]</span>
+            <span>[[ cTemp.units == "celsius" ? "°C" : "°F" ]]</span>
+        </b>
+
+        <span class="current-schedule">[[ firing.name !== "" ? " | " + firing.name : "" ]]</span>
+    </span>
+
+    <!-- Mobile Drop Down Button -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+        aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Pages -->
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link" href="index">Home <span class="sr-only">(current)</span></a>
+            <a class="nav-item nav-link" href="firing-schedules">Edit Firing Schedules</a>
+            <a class="nav-item nav-link" href="logging">Logging</a>
+            <a class="nav-item nav-link" href="settings">Settings</a>
+        </div>
+    </div>
+
+    <!-- Desktop Temp and Firing Schedule -->
+    <span v-if="Object.keys(cTemp).length !== 0" class="text-light d-none d-lg-block d-xl-block">
+
+        <!-- Average Temperature -->
+        <b class="d-inline-block">
+            <span>[[ cTemp.temp[cTemp.temp.length - 1] ]]</span>
+            <span>[[ cTemp.units == "celsius" ? "°C" : "°F" ]]</span>
+        </b>
+
+        <!-- Individual Temperature Readings -->
+        <span v-if="cTemp.temp.length > 2">&nbsp;(</span>
+        <div v-if="cTemp.temp.length > 2" v-for="(tempSensor, index) in cTemp.temp" class="d-inline-block">
+            <span v-if="index !== cTemp.temp.length - 1">[[ tempSensor ]]</span>
+            <span v-if="index !== cTemp.temp.length - 1">[[ cTemp.units == "celsius" ? "°C" : "°F" ]]</span>
+            <span v-if="index < cTemp.temp.length - 2">,&nbsp;</span>
+        </div>
+        <span v-if="cTemp.temp.length > 2">)</span>
+        
+        <span class="current-schedule">[[ firing.name !== "" ? " | " + firing.name : "" ]]</span>
+    </span>
+</nav>

@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en" class="h-100">
 
-  <head>
+<head>
 
     <title>PyKiln</title>
       
@@ -14,7 +14,8 @@
     <meta http-equiv="Expires" content="0" />
     
     <!--Vue 2.6-->
-    <script src="js/vue@2.6.0"></script>
+    <script src="js/vue.js"></script>
+    <script src="js/axios.min.js"></script>
     
     <!--Bootstrap + JQuery-->
     <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -23,10 +24,6 @@
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     
-    <!--Bootstrap Toggle-->
-    <!-- https://www.bootstraptoggle.com/ -->
-    <link href="css/bootstrap4-toggle.min.css" rel="stylesheet"> 
-    <script src="js/bootstrap4-toggle.min.js"></script>
     
     <!--Font Awesome-->
     <link href="css/all.min.css" rel="stylesheet">
@@ -36,47 +33,87 @@
     <script src="js/Chart.min.js"></script>
     <script src="js/utils.js"></script>
     
+    <script src="js/charts.js"></script>
+    
+    
     <!--PiKiln JS and CSS-->
     <link rel="stylesheet" href="css/styles.css">
-    <!-- <script src="js/script.js"></script> -->
-  </head>
-
+    
+    </head>
 
 <body class="d-flex flex-column h-100">
-  <nav class="navbar navbar-expand-lg bg-dark navbar-dark mb-4">
-    <a class="navbar-brand" href="index">PiKiln <i class="fas fa-burn"></i></a>
-    <span class="text-light d-lg-none d-xl-none"><span class="current-temperature"></span><span class="current-schedule"></span></span>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
-        aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
-            <a class="nav-item nav-link" href="index">Home <span class="sr-only">(current)</span></a>
-            <a class="nav-item nav-link" href="firing-schedules">Edit Firing Schedules</a>
-            <a class="nav-item nav-link" href="logging">Logging</a>
-            <a class="nav-item nav-link" href="settings">Settings</a>
-        </div>
-    </div>
-    <span class="text-light d-none d-lg-block d-xl-block"><span class="current-temperature"></span><span class="current-schedule"></span></span>
-</nav>
+    <div class="main-container" id="app">
+        <nav class="navbar navbar-expand-lg bg-dark navbar-dark mb-4">
+    
+            <!-- Main Home Button -->
+            <a class="navbar-brand" href="index">PiKiln <i class="fas fa-burn"></i></a>
+        
+            <!-- Mobile Temp and Firing Schedule -->
+            <span v-if="Object.keys(cTemp).length !== 0" class="text-light d-lg-none d-xl-none">
+        
+                <!-- Average Temperature -->
+                <b class="d-inline-block">
+                    <span>[[ cTemp.temp[cTemp.temp.length - 1] ]]</span>
+                    <span>[[ cTemp.units == "celsius" ? "°C" : "°F" ]]</span>
+                </b>
+        
+                <span class="current-schedule">[[ firing.name !== "" ? " | " + firing.name : "" ]]</span>
+            </span>
+        
+            <!-- Mobile Drop Down Button -->
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        
+            <!-- Pages -->
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link" href="index">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-item nav-link" href="firing-schedules">Edit Firing Schedules</a>
+                    <a class="nav-item nav-link" href="logging">Logging</a>
+                    <a class="nav-item nav-link" href="settings">Settings</a>
+                </div>
+            </div>
+        
+            <!-- Desktop Temp and Firing Schedule -->
+            <span v-if="Object.keys(cTemp).length !== 0" class="text-light d-none d-lg-block d-xl-block">
+        
+                <!-- Average Temperature -->
+                <b class="d-inline-block">
+                    <span>[[ cTemp.temp[cTemp.temp.length - 1] ]]</span>
+                    <span>[[ cTemp.units == "celsius" ? "°C" : "°F" ]]</span>
+                </b>
+        
+                <!-- Individual Temperature Readings -->
+                <span v-if="cTemp.temp.length > 2">&nbsp;(</span>
+                <div v-if="cTemp.temp.length > 2" v-for="(tempSensor, index) in cTemp.temp" class="d-inline-block">
+                    <span v-if="index !== cTemp.temp.length - 1">[[ tempSensor ]]</span>
+                    <span v-if="index !== cTemp.temp.length - 1">[[ cTemp.units == "celsius" ? "°C" : "°F" ]]</span>
+                    <span v-if="index < cTemp.temp.length - 2">,&nbsp;</span>
+                </div>
+                <span v-if="cTemp.temp.length > 2">)</span>
+                
+                <span class="current-schedule">[[ firing.name !== "" ? " | " + firing.name : "" ]]</span>
+            </span>
+        </nav>
 
   <main role="main" class="flex-shrink-0">
     <div class="container">
 
-        <div id="home-schedule-list" class="row">
+        <div id="home-schedule-list" v-bind:class="{'row':true, 'd-none':(firing.status === 'firing')}">
           <div class="col-12">
             <h2>Select Firing Schedule:</h2>
-            <select class="custom-select" id="fireScheduleList" name="fireScheduleList">
-              <option selected>Select Schedule</option>
-            </select>
+            <select id="fireScheduleList" class="custom-select" @change="onScheduleSelect($event)">
+                <option value="select-schedule" selected>Select Schedule</option>';
+                <option v-for="option in scheduleList" v-bind:value="option.path">[[ option.name ]]</option>
+              </select>
           </div>
         </div>
 
+      <div id="schedule-group" v-bind:class="{'d-none':(schedule.path === '')}">
 
-      <div id="schedule-group" class="d-none">
-
-      <h2 class="mb-3 mt-3" contenteditable="false" id="schedule-title">Bisque Fire (Stoneware)</h2>
+      <h2 class="mb-3 mt-3" contenteditable="false" id="schedule-title">[[ schedule.name ]]</h2>
 
       <h5>Firing Schedule</h5>
       <div id="table" class="table-responsive table-editable">
@@ -84,13 +121,22 @@
           <thead>
             <tr class="schedule-header">
               <th>SEG #</th>
-              <th class="degrees">RATE<br>(°C/HOUR)</th>
-              <th class="degrees">TARGET<br>TEMP (°C)</th>
+              <th class="degrees">RATE<br>([[ schedule.units == "fahrenheit" ? "°F" : "°C"]]/HOUR)</th>
+              <th class="degrees">TARGET<br>[[ schedule.units == "fahrenheit" ? "TEMP (°F)" : "TEMP (°C)"]]</th>
               <th>HOLD TIME<br>(MINUTES)</th>
             </tr>
           </thead>
           <tbody id="schedule-body">
+
             <!--firing segments loaded here-->
+            
+            <tr v-for="(segment, index) in schedule.segments" v-bind:class="{'segment-row' : true, 'current-segment':(index === firing.segment),  'text-light':(index === firing.segment)}">
+                <td></td>
+                <td class="numbersOnly" contenteditable="false">[[ segment.rate ]]</td>
+                <td class="numbersOnly" contenteditable="false">[[ segment.temp ]]</td>
+                <td class="numbersOnly" contenteditable="false">[[ segment.hold ]]</td>
+            </tr>
+           
           </tbody>
         </table>
       </div>
@@ -98,39 +144,47 @@
       
 
       <div class="row">
-        <h5 class="col-12 mb-3"><i class="fas fa-thermometer-half"></i> Current Temperature: <span class="current-temperature" id="home-current-temperature">220°F</span></h5>
+        <h5 class="col-12 mb-3" v-if="Object.keys(cTemp).length !== 0"><i class="fas fa-thermometer-half"></i> Current Temperature: 
+          <span>[[ cTemp.temp[cTemp.temp.length - 1] ]]</span><span>[[ cTemp.units == "celsius" ? "°C" : "°F" ]]</span>
+          <!-- <span id="home-current-temperature" v-cloak>[[ cTemp.temp ]]</span><span v-cloak></span>[[ cTemp.units == "celsius" ? "°C" : "°F" ]]</span> -->
+        </h5>
 
-        <div id="time-cost-estimates" class="col-12">
+        <div id="time-cost-estimates" v-bind:class="{'col-12' : true, 'd-none':(firing.status === 'firing')}">
         <!--cost estimates-->
-        <ul id="home-estimates" class="list-group col-12 mb-3">
-          <li class="list-group-item"><b>Estimated Time:</b> <span id="home-time">1:00</span></li>
-          <!-- <li class="list-group-item"><b>Estimated Cost:</b> <span id="home-cost">$3.50</span></li> -->
+        <ul id="home-estimates" v-bind:class="{'list-group':true, 'col-12':true, 'mb-3':true, 'd-none':(firing.status === 'firing')}">
+          <li class="list-group-item"><b>Estimated Time:</b> <span id="home-time">[[ timeEstimate ]]</span></li>
+          <li v-if="schedule.cost" class="list-group-item"><b>Estimated Cost:</b> <span id="home-cost">[[ formatCost(schedule.cost) ]]</span></li>
         </ul>
+
+        </div>
+      </div>
+      
         
-        <div id="home-time-group" class="row mb-3">
+        <div id="home-time-group" v-bind:class="{'row':true, 'mb-3':true, 'd-none':(firing.status !== 'firing')}">
           
-          <h5 class="col-12"><i class="fas fa-hourglass-half"></i> Time Remaining: <span id="home-time-remaining">0:00</span></h5>
+          <h5 class="col-12"><i class="fas fa-hourglass-half"></i> Time Remaining: <span id="home-time-remaining">[[ firing.timeRemaining ]]</span></h5>
         
           <div class="progress">
-            <div id="home-time-bar" class="progress-bar progress-bar-striped progress-bar-animated" style="width:0%"></div>
+            <div id="home-time-bar" class="progress-bar progress-bar-striped progress-bar-animated" :style="{ width: ((firing.currentTime/firing.totalTime) * 100) + '%' }"></div>
           </div>
         
         </div>
-        </div>
-        </div>
 
-        <div id="home-complete" class="row d-none">
+        <div id="home-complete" v-bind:class="{'row' : true, 'd-none':(firing.status !== 'complete')}">
           <h5 class="col-12"><i class="fas fa-flag-checkered"></i> Firing Complete:</h5>
           <!--cost estimates-->
-          <ul id="home-summary" class="list-group col-12 mb-4">
-            <li class="list-group-item"><b>Total Time:</b> <span id="home-time-summary">1:00</span></li>
-            <li class="list-group-item"><b>Cost:</b> <span id="home-cost-summary">$3.50</span></li>
-          </ul>
+          <div class="col-12">
+            <ul id="home-summary" class="list-group col-12 mb-4">
+              <li class="list-group-item"><b>Total Time:</b> <span id="home-time-summary">[[ timeEstimate ]]</span></li>
+              <li v-if="firing.cost" class="list-group-item"><b>Cost:</b> <span id="home-cost-summary">[[ formatCost(firing.cost) ]]</span></li>
+            </ul>
+          </div>
         </div>
 
-        <div id="home-error" class="row d-none">
-          <h5 class="col-12"><i class="fas fa-exclamation-triangle"></i><span id="home-error-title"> Faulty Relay #1</span></h5>
-          <p id="home-error-message" class="col-12">The firing schedule was stopped due to </p>
+
+        <div id="home-error" v-bind:class="{'row' : true, 'd-none':(firing.status !== 'error')}">
+          <h5 class="col-12"><i class="fas fa-exclamation-triangle"></i><span id="home-error-title"> [[ firing.error ]]</span></h5>
+          <p id="home-error-message" class="col-12">There was an error detected with the kiln. Please verify that all of the components are working correctly.</p>
         </div>
 
       
@@ -138,8 +192,13 @@
       <!--start firing schedule-->
       <div class="row mb-3">
         <div class="col-12 text-right">
-            <button data-toggle="modal" data-target="#start-confirm-modal" id="btn-start-schedule-modal" class="btn mb-2 full-width-small btn-primary d-none"><i class="fas fa-burn"></i> Start Schedule</button>
-            <button data-toggle="modal" data-target="#stop-confirm-modal" id="btn-stop-schedule-modal" class="btn mb-2 full-width-small btn-danger"><i class="fas fa-ban"></i> Stop Schedule</button>
+          <span v-bind:class="{'d-none':(firing.status === 'firing')}">
+              <button data-toggle="modal" data-target="#start-confirm-modal" id="btn-start-schedule-modal" class="btn mb-2 full-width-small btn-primary" ><i class="fas fa-burn"></i> Start Schedule</button>
+          </span>
+          <span v-bind:class="{'d-none':(firing.status !== 'firing')}">
+              <button data-toggle="modal" data-target="#stop-confirm-modal" id="btn-stop-schedule-modal" class="btn mb-2 full-width-small btn-danger"><i class="fas fa-ban"></i> Stop Schedule</button>
+          </span>
+            
         </div>
       </div>
 
@@ -148,28 +207,25 @@
     </div>
   </main>
 
-<footer class="footer mt-auto py-3 bg-light">
-  <div class="container">
-      <span class="text-muted">This is not a commercial product, use this software at your own risk.</span>
-  </div>
-  <script></script>
-</footer>
 
-{% with modalid="start-confirm-modal", modaltitle="Start Firing Schedule?", modalbody="", buttonid="btn-start-schedule", modalbutton="<i class='fas fa-burn'></i> Start Schedule" %}
+<!-- {% with modalid="start-confirm-modal", modaltitle="Start Firing Schedule?", modalbody="", buttonid="btn-start-schedule", modalbutton="<i class='fas fa-burn'></i> Start Schedule", modalfunction="startFire(schedule.path)" %}
 {% include 'modal-primary.html' %}
 {% endwith %}
 
-{% with modalid="stop-confirm-modal", modaltitle="Stop Firing Schedule?", modalbody="", buttonid="btn-stop-schedule", modalbutton="<i class='fas fa-ban'></i> Stop Schedule" %}
+{% with modalid="stop-confirm-modal", modaltitle="Stop Firing Schedule?", modalbody="", buttonid="btn-stop-schedule", modalbutton="<i class='fas fa-ban'></i> Stop Schedule", modalfunction="stopFire"  %}
 {% include 'modal-danger.html' %}
-{% endwith %}
+{% endwith %} -->
 
-  <script src="js/script.js"></script>
-  <script>
-    $(document).ready(function() {
-        console.log( "document loaded" );
-        LoadSchedules();
-    });
-</script>
+</div>
+
+<footer class="footer mt-auto py-3 bg-light">
+    <div class="container">
+        <span class="text-muted">This is not a commercial product, use this software at your own risk.</span>
+    </div>
+</footer>
+
+<script src="js/pikiln-scripts.js"></script>
+<script src="js/pikiln-vue.js"></script>
 
 </body>
 
