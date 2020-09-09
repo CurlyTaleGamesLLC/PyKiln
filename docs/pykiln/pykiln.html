@@ -2,7 +2,6 @@
 <html lang="en" class="h-100">
 
 <head>
-
     <title>PyKiln</title>
       
     <meta charset="utf-8">
@@ -49,32 +48,174 @@
 <body class="d-flex flex-column h-100">
 
 <div class="main-container" id="app">
-    <navbar title="PyKiln" v-on:custom="pageSelect"></navbar>
+    <navbar v-bind:key="pages.current" v-bind:name="system.name" v-bind:current="pages.current" v-on:custom="pageSelect"></navbar>
 
     <main role="main" class="flex-shrink-0">
         <div class="container">
 
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#start-confirm-modal">Launch demo modal</button>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#stop-confirm-modal">Launch DANGER modal</button>
-            <div class="kiln-base">
-                <img class="kiln-zones" src="imgs/kiln-base.svg">
-                <img class="kiln-zones" v-bind:src="'imgs/kiln-zones-' + settings.zones + '.svg'">
-                <img class="kiln-temp" v-bind:src="'imgs/kiln-temp-' + settings.sensors + '.svg'">
+            <!-- Home Page -->
+            <div v-if="pages.current == 'index'">
+                <div class="row">
+                    <h2 class="col-12 mb-3">Select Firing Schedule:</h2>
+                </div>
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#start-confirm-modal">Launch demo modal</button>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#stop-confirm-modal">Launch DANGER modal</button>
+            </div>
+
+            <!-- Edit Page -->
+            <div v-if="pages.current == 'firing-schedule'">
+                <div class="row">
+                    <div class="col-12">
+                      <h2>Edit Firing Schedule:</h2>
+                    </div>
+                  </div>
+            </div>
+
+            <!-- Logging Page -->
+            <div v-if="pages.current == 'logging'">
+                <div class="row">
+                    <div class="col-12">
+                      <h2>Most Recent Firing:</h2>
+                    </div>
+                  </div>
             </div>
 
 
-            <div v-if="pages.current == 'settings'">
-                <heading title="Settings"></heading>
+
+
+
+            <!-- Settings Page -->
+            <div v-if="pages.current == 'settings' && firing.status == 'firing'" class="card mb-3">
+                <div class="card-body">Settings cannot be changed while running a firing schedule.</div>
+            </div>
+            <div v-if="pages.current == 'settings'" :class="{gray: firing.status == 'firing'}">
                 <div class="row">
-                    <settingsinput v-if="settings.updated" ref="volts" v-bind:value.sync="settings.volts" name="Kiln Voltage" icon="fa-bolt" label="Measure your mains voltage, usually 110 or 220 volts for USA/Canada" type="number" step="1"></settingsinput>
-                    <settingsinput v-if="settings.updated" ref="cost" v-bind:value.sync="settings.cost" name="Cost Per Kilowatt" icon="fa-dollar-sign" type="number" step="0.01"></settingsinput>
+                    <h2 class="col-12 mb-3">Settings</h2>
                 </div>
-                <heading title="Notifications"></heading>
+
+                <!-- Notifications -->
                 <div class="row">
-                    <settingsinput v-if="settings.updated" v-bind:value.sync="settings.email" name="Email Address" icon="fa-at" type="text"></settingsinput>
+                    <h5 class="col-12 mb-3"><i class="fas fa-info-circle"></i> Communication</h5>
+                    <settingsinput v-bind:value.sync="settings.name" v-bind:key="settingsFields.name.id" v-bind:status="firing.status" v-bind:field="settingsFields.name"></settingsinput>
+                    <settingsinput v-bind:value.sync="settings.timezone" v-bind:key="settingsFields.timezone.id" v-bind:status="firing.status" v-bind:field="settingsFields.timezone"></settingsinput>
+                    <settingsinput v-bind:value.sync="settings.email" v-bind:key="settingsFields.email.id" v-bind:status="firing.status" v-bind:field="settingsFields.email"></settingsinput>
+                    <settingsinput v-bind:value.sync="settings.audio" v-bind:key="settingsFields.audio.id" v-bind:status="firing.status" v-bind:field="settingsFields.audio"></settingsinput>
                 </div>
-                <!-- too much custom stuff, get rid of the components -->
+
+                <!--Electricity Cost-->
+                <div class="row">
+                    <h5 class="col-12 mb-3"><i class="fas fa-plug"></i> Electrical</h5>
+                    <settingsinput v-bind:value.sync="settings.volts" v-bind:key="settingsFields.volts.id" v-bind:status="firing.status" v-bind:field="settingsFields.volts"></settingsinput>
+                    <settingsinput v-bind:value.sync="settings.cost" v-bind:key="settingsFields.cost.id" v-bind:status="firing.status" v-bind:field="settingsFields.cost"></settingsinput>
+                </div>
+
+                
+
+                <!-- Temperature -->
+                <div class="row">
+                    <h5 class="col-12 mb-3"><i class="fas fa-thermometer-half"></i> Temperature</h5>
+                    <settingsinput v-bind:value.sync="settings.units" v-bind:key="settingsFields.units.id" v-bind:status="firing.status" v-bind:field="settingsFields.units"></settingsinput>
+                    <settingsinput v-bind:value.sync="settings.maxTemp" v-bind:key="settingsFields.maxTemp.id" v-bind:status="firing.status" v-bind:field="settingsFields.maxTemp"></settingsinput>
+                </div>
+
+
+                <!-- this could be turned into a component -->
+                <div class="row mt-3"><h5 class="col-12 text-md-center">Kiln Heating Zones & Sensors</h5></div>
+                <div class="row justify-content-center">
+                    <small class="col-12 col-md-6 mb-4">This should only need to be changed when you are setting up your kiln for the first time, or making physical changes to the wiring of your kiln.</small>
+                </div>
+                <!-- Zone and Sensor Labels -->
+                <div class="row">
+                    <div class="col col-md-6  text-center">
+                        <div class="row">
+                            <h2 class="col-12"><i class="fas fa-burn"></i></h2><h6 class="col-12">Heating Zones</h6> 
+                        </div>
+                    </div>
+                    <div class="col col-md-6 text-center">
+                        <div class="row">
+                            <h2 class="col-12"><i class="fas fa-thermometer-half"></i></h2><h6 class="col-12">Temperature Sensors</h6> 
+                        </div>
+                    </div>
+                </div>
+
+                 <!-- Zone and Sensor Buttons and Kiln Graphic -->
+            <div class="row">
+                
+                <div class="col col-md-2 offset-md-2 text-center">
+                    <div class="row h-100 px-3">
+                        <div class="m-auto">
+                            <button :disabled="firing.status == 'firing'" class="col-12 btn btn-primary mx-auto" v-on:click="incrementZones"><i class="fas fa-plus"></i></button>
+                            <h2 class="col-12 my-1">{{ settings.zones }}</h2> 
+                            <button :disabled="firing.status == 'firing'" class="col-12 btn btn-primary mx-auto" v-on:click="decrementZones"><i class="fas fa-minus"></i></button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col col-md-4">
+                    <div class="kiln-parent">
+                        <img class="kiln-base" src="imgs/kiln-base.svg">
+                        <img class="kiln-overlay" v-bind:src="'imgs/kiln-zones-' + settings.zones + '.svg'">
+                        <img class="kiln-overlay" v-bind:src="'imgs/kiln-temp-' + settings.sensors + '.svg'">
+                    </div>
+                </div>
+
+                <div class="col col-md-2 text-center">
+                    <div class="row h-100 px-3">
+                        <div class="m-auto">
+                            <button :disabled="firing.status == 'firing'" class="col-12 btn btn-primary mx-auto" v-on:click="incrementSensors"><i class="fas fa-plus"></i></button>
+                            <h2 class="col-12 my-1">{{settings.sensors}}</h2> 
+                            <button :disabled="firing.status == 'firing'" class="col-12 btn btn-primary mx-auto" v-on:click="decrementSensors"><i class="fas fa-minus"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!--Temp Offset-->
+            <!-- This could be turned into a component -->
+            <div class="row mt-3 justify-content-center">
+                <div class="form-group col-12 col-md-4">
+                    <h5><i class="fas fa-burn"></i> Zone Adjustment</h5>
+                    <div v-for="(zone, index) in settings.zoneAdjustment">
+                        <div  v-if="index < settings.zones" class="input-group my-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><b>Zone {{index + 1}}</b></span>
+                            </div>
+                            <input type="number" min="0" max="200" class="form-control" placeholder="100" v-model.number="settings.zoneAdjustment[index]">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-percent"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <small class="d-block text-muted">Adjust the heating percentage of each heating zone of your kiln. Typically the top and bottom of a kiln are cooler that the middle.</small>
+                </div>
+                <div class="form-group col-12 col-md-4">
+                    <h5><i class="fas fa-thermometer-half"></i> Sensor Adjustment</h5>
+                    <div v-for="(sensor, index) in settings.sensorAdjustment">
+                        <div  v-if="index < settings.sensors" class="input-group my-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><b>Temp {{index + 1}}</b></span>
+                            </div>
+                            <input type="number" min="0" max="200" class="form-control" placeholder="0" v-model.number="settings.sensorAdjustment[index]">
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <b>
+                                        <span v-if="settings.units == 'fahrenheit'">°F</span>
+                                        <span v-else>°C</span>
+                                    </b>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <small class="d-block text-muted">Thermocouples can be +/- 5 degrees off. Put your thermocouple(s) in ice water and enter the temperature difference to 32°F (0°C) to compensate for error.</small>
+                </div>
+            </div>
+
+            <!-- Save Settings Button -->
+            <div class="row mb-5">
+                <div class="col-12 col-md-3 ml-auto">
+                    <button class="btn btn-primary w-100" v-on:click="saveSettings" :disabled="firing.status == 'firing'"><i class="fas fa-save"></i> Save Settings</button>
+                </div>
             </div>
 
         </div>
@@ -89,7 +230,7 @@
 
 <footer class="footer mt-auto py-3 bg-light">
     <div class="container text-center">
-        <span class="text-muted">This is not a commercial product, use this software at your own risk.</span>
+        <span class="text-muted">This is not a commercial product, use this software at your own risk. <br>If you'd like to contribute to the project <a href="https://github.com/CurlyTaleGamesLLC/PyKiln/">check out our GitHub page.</a></span>
     </div>
 </footer>
 
@@ -97,5 +238,4 @@
 <script src="js/pykiln-vue.js"></script>
 
 </body>
-
 </html>

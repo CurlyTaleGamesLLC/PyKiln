@@ -1,10 +1,10 @@
 Vue.component('navbar', {
-  props: ['title'],
+  props: ['name','current'],
   template: `
     <nav class="navbar navbar-expand-lg bg-dark navbar-dark mb-4">
       
     <!-- Main Home Button -->
-    <a class="navbar-brand" href="index">PyKiln <i class="fas fa-burn"></i></a>
+    <a class="navbar-brand" href="index">{{name}} <i class="fas fa-burn"></i></a>
 
     <!-- Mobile Temp and Firing Schedule -->
     <span class="text-light d-lg-none d-xl-none">
@@ -27,10 +27,10 @@ Vue.component('navbar', {
     <!-- Pages -->
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
-            <a class="nav-item nav-link" href="index" v-on:click="setPage">Home <span class="sr-only">(current)</span></a>
-            <a class="nav-item nav-link" href="firing-schedules" v-on:click="setPage">Edit Firing Schedules</a>
-            <a class="nav-item nav-link" href="logging" v-on:click="setPage">Logging</a>
-            <a class="nav-item nav-link" href="settings" v-on:click="setPage">Settings</a>
+            <a class="nav-item nav-link" :class="{active: current == 'index'}" href="index" v-on:click="setPage">Home <span class="sr-only">(current)</span></a>
+            <a class="nav-item nav-link" :class="{active: current == 'firing-schedules'}" href="firing-schedules" v-on:click="setPage">Edit Firing Schedules</a>
+            <a class="nav-item nav-link" :class="{active: current == 'logging'}" href="logging" v-on:click="setPage">Logging</a>
+            <a class="nav-item nav-link" :class="{active: current == 'settings'}" href="settings" v-on:click="setPage">Settings</a>
         </div>
     </div>
 
