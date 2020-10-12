@@ -23,8 +23,7 @@ var app = new Vue({
             cost:0.14,
             email:"example@example.com",
             audio:false,
-            timezone:"eastern"
-            
+            timezone:""
         },
         settingsFields:{
             name:{
@@ -136,9 +135,16 @@ var app = new Vue({
             var updatedTimeZones = [];
             var utcTime = moment.utc();
             console.log(utcTime);
+
+            var localUtcTime = moment().utcOffset()/60;
+            
+
             for(var i = -12; i < 13; i++){
                 var newOption = {"label": toTimeZone(utcTime, i), "value":i}
                 updatedTimeZones.push(newOption);
+                if(this.settings.timezone == "" && localUtcTime == i){
+                    this.settings.timezone = i;
+                }
             }
             this.settingsFields.timezone.options = updatedTimeZones;
 
@@ -205,3 +211,18 @@ function toTimeZone(newTime, zone) {
     var format = 'HH:mm YYYY/MM/DD';
     return moment(newTime).utcOffset(zone).format(format);
 }
+
+/*
+
+//Send all post request data as form data to picoweb
+const formData = new FormData();
+formData.append('_username', email);
+formData.append('_password', password);
+
+axios
+  .post('/api/login', formData)
+  .then(response => {
+      ...
+
+
+*/

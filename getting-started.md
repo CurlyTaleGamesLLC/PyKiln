@@ -21,12 +21,15 @@ pip3 install --upgrade micropy-cli
 Download Micropython for the ESP32:
 https://micropython.org/download/esp32/
 I'm using this build: GENERIC : esp32-idf3-20191220-v1.12.bin
+esp32-idf3-20200902-v1.13.bin
 
 Erase everything on the ESP32:
+Hold down the Boot button on the ESP32 and then run this command:
 esptool.py --chip esp32 --port COM4 erase_flash
 
 Install Micropython:
 esptool.py --chip esp32 --port COM4 --baud 460800 write_flash -z 0x1000 esp32-idf3-20191220-v1.12.bin
+esptool.py --chip esp32 --port COM4 --baud 460800 write_flash -z 0x1000 esp32-idf3-20200902-v1.13.bin
 
 
 To list out all the available stubs for esp32:
@@ -67,3 +70,15 @@ In the global settings set "address" to be your serial port, also set "auto_conn
 Press CTRL + SHIFT + P and search for pymaker > connect
 
 Running that will now connect you to your esp32 over serial
+
+
+If you need to manage the files on the ESP32 run this command to get a remote shell connection:
+
+rshell -p COM4
+
+switch to the pyboard directory and list the files:
+
+cd /pyboard/
+ls
+
+

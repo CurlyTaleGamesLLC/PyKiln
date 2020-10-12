@@ -1,0 +1,22 @@
+{
+    "network":{
+        "wifi":"",
+        "password":"",
+        "host":""
+    },
+    "ip":"",
+    "configured":false,
+    "kiln":{
+        "zones":3,
+        "zoneAdjustments":[0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+        "sensors":1,
+        "sensorOffsets":[0.0, 0.0, 0.0, 0.0],
+        "maxTemp":2000,
+        "units":"fahrenheit"
+    },
+    "electrical":{
+        "volts":120,
+        "cost":0.14
+    },
+    "email":"curlytalegames@gmail.com"
+}

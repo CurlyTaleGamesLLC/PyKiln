@@ -1,0 +1,8 @@
+{
+    "network":{
+        "wifi":"Hey You Kids Get Off Our LAN!",
+        "password":"1234567890",
+        "host":""
+    },
+    "configured":true
+}
