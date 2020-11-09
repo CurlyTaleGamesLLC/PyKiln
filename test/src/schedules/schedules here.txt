@@ -1,1 +1,0 @@
-Schedules go in this folder
