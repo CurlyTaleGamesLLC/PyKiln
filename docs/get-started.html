@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Open source kiln controller">
+    <meta name="author" content="">
+    <link rel="icon" href="favicon.ico">
+
+    <title>PyKiln</title>
+    <link rel="canonical" href="http://pykiln.com">
+
+    <!-- Bootstrap core CSS -->
+    <link href="./css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="./css/cover.css" rel="stylesheet">
+	<link href="./css/styles.css" rel="stylesheet">
+  </head>
+
+  <body class="text-center">
+  
+   <div class="full-size">
+ 
+
+    <div class="cover-container d-flex flex-column">
+		<div class="tint">
+      <header class="masthead container p-3">
+        <div class="inner">
+          <h3 class="masthead-brand">PyKiln</h3>
+          <nav class="nav nav-masthead justify-content-center">
+            <a class="nav-link" href="./index.html">Home</a>
+            <a class="nav-link" href="./features.html">Features</a>
+			<a class="nav-link active" href="./get-started.html">Get Started</a>
+            <a class="nav-link" href="https://github.com/CurlyTaleGamesLLC/PyKiln" target="_blank">GitHub</a>
+          </nav>
+        </div>
+      </header>
+	  
+	  <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center container">
+	<div class="row">
+		<h1 class="display-4 col-12 mb-5">Some Assembly Required</h1>
+	</div>
+
+   <div class="album text-left">
+        <div class="container">
+		
+		<div class="row">
+			<h2 class="col-12 mb-4 text-center">PyKiln Installation:</h2>
+		</div>
+		  
+		  <div class="row">
+			<div class="col-12 mb-4">
+			<div class="embed-responsive embed-responsive-16by9">
+				<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/wjF4tOocXQg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+			</div>
+			</div>
+			<p class="col-12 text-center mb-5">This is a placeholder video for now, I'll swap this out for the real installation guide later.</p>
+			
+		  </div>
+		
+		<div class="row">
+			<h2 class="col-12 mb-4 text-center">Shopping List:</h2>
+		</div>
+
+          <div class="row">
+		  
+			<div class="col-12">
+			<ul class="list-group shadow">
+				<li class="list-group-item">
+					<a href="https://amzn.to/36hSW9Y" target="_blank">
+					<div class="media p-3 text-primary">
+						<div class="media-body">
+							<h5 class="mt-0 font-weight-bold mb-2">ESP32 Dev Kit</h5>
+							<p class="font-italic text-muted mb-0 small"></p>
+						</div>
+						<img src="./images/bom/esp32.jpg" width="100" class="ml-lg-5 ml-1">
+					</div>
+					</a>
+				</li>
+				
+				<li class="list-group-item">
+					<a href="https://amzn.to/38nlvp9" target="_blank">
+					<div class="media p-3 text-primary">
+						<div class="media-body">
+							<h5 class="mt-0 font-weight-bold mb-2">Solid State Relay</h5>
+							<p class="font-italic text-muted mb-0 small">One per heating zone, 40 amp or higher</p>
+						</div>
+						<img src="./images/bom/ssr.jpg" width="100" class="ml-lg-5 ml-1">
+					</div>
+					</a>
+				</li>
+				<li class="list-group-item">
+					<a href="https://amzn.to/2IdnUbm" target="_blank">
+					<div class="media p-3 text-primary">
+						<div class="media-body">
+							<h5 class="mt-0 font-weight-bold mb-2">Relay Heatsinks</h5>
+							<p class="font-italic text-muted mb-0 small">One per Solid State Relay</p>
+						</div>
+						<img src="./images/bom/heatsink.jpg" width="100" class="ml-lg-5 ml-1">
+					</div>
+					</a>
+				</li>
+
+				
+				<li class="list-group-item">
+					<a href="https://amzn.to/3n3Bwoo" target="_blank">
+					<div class="media p-3 text-primary">
+						<div class="media-body">
+							<h5 class="mt-0 font-weight-bold mb-2">Contactor</h5>
+							<p class="font-italic text-muted mb-0 small">Acts as the main power switch for firing</p>
+						</div>
+						<img src="./images/bom/contactor.jpg" width="100" class="ml-lg-5 ml-1">
+					</div>
+					</a>
+				</li>
+				<li class="list-group-item">
+					<a href="https://amzn.to/2U6nAxG" target="_blank">
+					<div class="media p-3 text-primary">
+						<div class="media-body">
+							<h5 class="mt-0 font-weight-bold mb-2">Mechanical 5V Relay</h5>
+							<p class="font-italic text-muted mb-0 small">Turns the Contactor on and off</p>
+						</div>
+						<img src="./images/bom/relay.jpg" width="100" class="ml-lg-5 ml-1">
+					</div>
+					</a>
+				</li>
+
+				<li class="list-group-item">
+					<a href="https://www.amazon.com/AmazonBasics-RJ45-Cat-6-Ethernet-Patch-Cable-10-Feet-3-Meters/dp/B00N2VIALK/" target="_blank">
+					<div class="media p-3 text-primary">
+						<div class="media-body">
+							<h5 class="mt-0 font-weight-bold mb-2">Ethernet Cable</h5>
+							<p class="font-italic text-muted mb-0 small">If you plan on mounting your PyKiln close to the kiln buy a short cable.</p>
+						</div>
+						<img src="./images/bom/ethernet.jpg" width="100" class="ml-lg-5 ml-1">
+					</div>
+					</a>
+				</li>
+				<li class="list-group-item">
+					<a href="https://amzn.to/3kaHke1" target="_blank">
+					<div class="media p-3 text-primary">
+						<div class="media-body">
+							<h5 class="mt-0 font-weight-bold mb-2">Adafruit Universal Thermocouple Amplifier MAX31856</h5>
+							<p class="font-italic text-muted mb-0 small">Only purchase this is you need more than one temperature sensor</p>
+						</div>
+						<img src="./images/bom/max31856.jpg" width="100" class="ml-lg-5 ml-1">
+					</div>
+					</a>
+				</li>
+				<li class="list-group-item">
+					<a href="https://amzn.to/32kXBHm" target="_blank">
+					<div class="media p-3 text-primary">
+						<div class="media-body">
+							<h5 class="mt-0 font-weight-bold mb-2">High Temperature K-Type Thermocouple</h5>
+							<p class="font-italic text-muted mb-0 small">One per temperature sensor</p>
+						</div>
+						<img src="./images/bom/thermocouple.jpg" width="100" class="ml-lg-5 ml-1">
+					</div>
+					</a>
+				</li>
+				<li class="list-group-item">
+					<a href="https://amzn.to/2U6lii4" target="_blank">
+					<div class="media p-3 text-primary">
+						<div class="media-body">
+							<h5 class="mt-0 font-weight-bold mb-2">Red and Black Wire</h5>
+							<p class="font-italic text-muted mb-0 small">25 feet of each should be plenty</p>
+						</div>
+						<img src="./images/bom/wire.jpg" width="100" class="ml-lg-5 ml-1">
+					</div>
+					</a>
+				</li>
+				<li class="list-group-item">
+					<a href="#" target="_blank">
+					<div class="media p-3 text-primary">
+						<div class="media-body">
+							<h5 class="mt-0 font-weight-bold mb-2">PyKiln Control Board</h5>
+							<p class="font-italic text-muted mb-0 small">This isn't currently available for sale.</p>
+						</div>
+						<img src="./images/bom/pcb.png" width="100" class="ml-lg-5 ml-1">
+					</div>
+					</a>
+				</li>
+				<li class="list-group-item">
+					<a href="https://www.facebook.com/marketplace/search/?query=electric%20kiln" target="_blank">
+					<div class="media p-3 text-primary">
+						<div class="media-body">
+							<h5 class="mt-0 font-weight-bold mb-2">Used Electric Kiln</h5>
+							<p class="font-italic text-muted mb-0 small">Check both Facebook Marketplace and Craigslist.</p>
+						</div>
+						<img src="./images/bom/kiln.jpg" width="100" class="ml-lg-5 ml-1">
+					</div>
+					</a>
+				</li>
+				
+			</ul>
+			
+			</div>
+		
+          </div>
+		  
+		  <div class="row">
+			<p class="col-12 mt-4 mb-5">All of the products above have Amazon affiliate links, which if purchased a small percentage goes back to supporting this project. I would advise you to also check Ebay, AliExpress, or other online stores as you might find a better price elsewhere.</p>
+		</div>
+		
+		<div class="row">
+			<h2 class="col-12 mb-4 text-center">Buy The PyKiln Kit:</h2>
+		</div>
+		
+		  <div class="row">
+		  
+			<div class="col-12 mb-5">
+			<ul class="list-group shadow">
+				<li class="list-group-item">
+					<a href="#" target="_blank">
+					<div class="media p-3 text-primary">
+						<div class="media-body">
+							<h5 class="mt-0 font-weight-bold mb-2">PyKiln Kit</h5>
+							<p class="font-italic text-muted mb-0 small">This includes all of the items above except for the kiln, some parts may be slightly different due to availability. PyKiln comes pre-installed on the ESP32 and all of the sensors and relays have been tested and verified to be working. This isn't currently available for sale.</p>
+						</div>
+						<img src="./images/bom/esp32.jpg" width="100" class="ml-lg-5 ml-1">
+					</div>
+					</a>
+				</li>
+			</ul>
+			
+			</div>
+		
+          </div>
+		  
+		  
+		  <div class="row mt-1 text-center p-3">
+			<small class="col-12">Photo by Tom Crew on Unsplash</small>
+			</div>
+        </div>
+      </div>
+	  
+
+      
+	  </div>
+	  
+	
+	  
+    </div>
+	
+	 
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="./js/jquery-3.4.1.min.js"></script>
+    <!-- <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script> -->
+    <script src="./js/popper.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+	
+	
+	</div>
+  </body>
+</html>

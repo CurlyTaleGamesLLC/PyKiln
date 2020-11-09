@@ -2,9 +2,9 @@ import machine
 import uasyncio
 import settings
 
-pins = [12, 13, 27, 26, 25, 33, 32]
-# change GPIO14, it is on by default when ESP32 reboots
-# change 14 it to pin 13
+pins = [12, 14, 27, 26, 25, 33, 32]
+# change GPIO14 , it is on by default when ESP32 reboots
+# change it to pin 13
 relayPins = []
 
 count = -1

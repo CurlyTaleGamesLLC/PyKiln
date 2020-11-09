@@ -1,0 +1,22 @@
+{
+    "name":"Bisque Fire (Stoneware)4",
+    "path":"71e99de1-9750-41df-bd81-987cdfa5682d.json",
+    "segments":[
+        {
+            "hold":30,
+            "rate":300,
+            "temp":500
+        },
+        {
+            "hold":120,
+            "rate":400,
+            "temp":1200
+        },
+        {
+            "hold":200,
+            "rate":200,
+            "temp":800
+        }
+    ],
+    "units":"fahrenheit"
+}

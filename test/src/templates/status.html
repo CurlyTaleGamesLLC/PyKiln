@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <title>PyKiln Status</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="static/styles.css">
+        <script src="static/scripts.js"></script>
+
+    </head>
+    <body>
+        <div class="tcenter header">
+            <img class="logo" height="40px" src="data:image/svg+xml;base64,PHN2ZyBhcmlhLWhpZGRlbj0idHJ1ZSIgZm9jdXNhYmxlPSJmYWxzZSIgZGF0YS1wcmVmaXg9ImZhcyIgZGF0YS1pY29uPSJidXJuIiBjbGFzcz0ic3ZnLWlubGluZS0tZmEgZmEtYnVybiBmYS13LTEyIiByb2xlPSJpbWciIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDM4NCA1MTIiPjxwYXRoIGZpbGw9ImN1cnJlbnRDb2xvciIgZD0iTTE5MiAwQzc5LjcgMTAxLjMgMCAyMjAuOSAwIDMwMC41IDAgNDI1IDc5IDUxMiAxOTIgNTEyczE5Mi04NyAxOTItMjExLjVjMC03OS45LTgwLjItMTk5LjYtMTkyLTMwMC41em0wIDQ0OGMtNTYuNSAwLTk2LTM5LTk2LTk0LjggMC0xMy41IDQuNi02MS41IDk2LTE2MS4yIDkxLjQgOTkuNyA5NiAxNDcuNyA5NiAxNjEuMiAwIDU1LjgtMzkuNSA5NC44LTk2IDk0Ljh6Ij48L3BhdGg+PC9zdmc+"/>
+            <h1>PyKiln Status</h1>
+        </div>
+        <table class="center"><tr><td>State</td></tr><tr><td id="state"></td></tr></table>
+        <table id="system" class="center"></table>
+        <table id="electrical" class="center"></table>
+        <table id="temperature" class="center"></table>
+        <table id="relays" class="center"></table>
+        <table id="notifications" class="center">
+            <tr><td>Notifications</td><td></td></tr>
+            <tr><td>Speaker:</td>
+            <td><button disabled onclick="Post(this, '/api/speaker')" class="btn t-btn">Test</button></td></tr>
+            <tr><td>RGB LED:</td>
+            <td><button disabled onclick="Post(this, '/api/led')" class="btn t-btn">Test</button></td></tr>
+        </table>
+        <div class="tcenter"><p>PyKiln is not a commercial product, use at your own risk.</p></div>
+        <script>GetStatus();</script>
+    </body>
+</html>

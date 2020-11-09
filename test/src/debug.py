@@ -27,7 +27,7 @@ async def CheckButton():
         elif counter > 0:
             counter = 0
             print("Not Held Long Enough")
-            temperature.SensorTemp(5)
+            # temperature.SensorTemp(16)
             current.Measure()
         await uasyncio.sleep(1)
 

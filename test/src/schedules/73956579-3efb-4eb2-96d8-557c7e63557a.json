@@ -1,0 +1,17 @@
+{
+    "name":"Test Schedule",
+    "path":"73956579-3efb-4eb2-96d8-557c7e63557a.json",
+    "segments":[
+        {
+            "hold":0,
+            "rate":100,
+            "temp":500
+        },
+        {
+            "hold":0,
+            "rate":100,
+            "temp":1000
+        }
+    ],
+    "units":"fahrenheit"
+}

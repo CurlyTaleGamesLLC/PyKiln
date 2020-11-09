@@ -1,44 +1,106 @@
-Installing Dependencies:
+# Getting Started
 
-Install Python 3.7 or Newer, make sure to include the paths and command lines tools
-https://www.python.org/downloads/
 
-Install NodeJS 6.95 or higher:
-https://nodejs.org/en/
+This is an open source hardware and software project, and before you can get your hands dirty you will need some parts to test things out. [Here is a list of everything you will need.](http://pykiln.com/get-started.html "Here is a list of everything you will need.")
 
-Install Visual Studio Code:
-https://code.visualstudio.com/
+## Install Micropython + PyKiln on an ESP32
 
-Install plugins for VS Code:
-install python extension
-install pymakr extension
-install pylint extension
+[Install Python 3.7 or higher](https://www.python.org/downloads/ "Install Python 3.7 or higher")
+(make sure to include the paths and command lines tools during installation)
 
+Download and upzip the PyKiln repository to your computer.
+
+Included in the repository is a python script that will automatically download the required libraries, erase your ESP32, write the Micropython firmware, and then copy the PyKiln files in the src folder to the ESP32. 
+
+The script is called **setup-esp32.py**
+
+#### Windows
+
+To run the python script you can double click the **setup-esp32-windows.bat** file
+
+#### Mac OS and Linux
+Open terminal and CD to the PyKiln directory and run:
+
+`python3 setup-esp32.py`
+
+#### Installation Complete!
+
+After you have installed Micropython and PyKiln on your ESP32 you are all set to start using it. The instructions below are for developers who want to work on the project.
+
+
+------------
+
+
+
+## Install Development Tools
+
+If you're interested in customizing or helping with the development of PyKiln here are the tools you'll need to get started.
+
+### Software
+- [Install Python 3.7 or higher](https://www.python.org/downloads/ "Install Python 3.7 or higher") (make sure to include the paths and command lines tools during installation)
+- [Install NodeJS 6.95 or higher](https://nodejs.org/en/ "Install NodeJS 6.95 or higher")
+- [Install Visual Studio Code](https://code.visualstudio.com/ "Install Visual Studio Code")
+
+### Visual Studio Code Extensions
+Open Visual Studio Code, then click on the Extensions button and search and install the following extensions:
+- python
+- pymakr
+- pylint
+
+### Python Libraries
 Open command prompt in project directory
-pip3 install esptool
-pip3 install --upgrade micropy-cli
+`pip3 install esptool`
+`pip3 install --upgrade micropy-cli`
 
-Download Micropython for the ESP32:
-https://micropython.org/download/esp32/
-I'm using this build: GENERIC : esp32-idf3-20191220-v1.12.bin
-esp32-idf3-20200902-v1.13.bin
+### Micropython firmware for the ESP32:
+Included in this project is the following build:
+**GENERIC : esp32-idf3-20200902-v1.13.bin**
 
-Erase everything on the ESP32:
-Hold down the Boot button on the ESP32 and then run this command:
-esptool.py --chip esp32 --port COM4 erase_flash
+[For the latest firmware please check the micropython website.](https://micropython.org/download/esp32/ "For the latest firmware please check the micropython website.")
 
-Install Micropython:
-esptool.py --chip esp32 --port COM4 --baud 460800 write_flash -z 0x1000 esp32-idf3-20191220-v1.12.bin
-esptool.py --chip esp32 --port COM4 --baud 460800 write_flash -z 0x1000 esp32-idf3-20200902-v1.13.bin
+### Flashing the firmware:
+
+Here is how to manually flash Micropython onto an ESP32, or you can also  use the included **setup-esp32.py** file which will do the same thing.
+
+#### Find Your Serial Port
+
+**Windows**
+Open Device Manager to find the COM port used by your ESP32, it should be labeled Silicon Labs. In my case it's COM4
+
+**Linux**
+To find it on Linux, run this command:
+`ls /dev/tty*`
+
+**Mac OS**
+On Mac run this command:
+`ls /dev/cu.*`
+
+More info here if you're having trouble getting connected over Serial:
+https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/establish-serial-connection.html
 
 
-To list out all the available stubs for esp32:
-micropy stubs search esp32
+#### Erase everything on the ESP32:
+Hold down the BOOT button on the ESP32 and run this command:
+`esptool.py --chip esp32 --port COM4 erase_flash`
+Once a connection has been established you can let go of the BOOT button
 
-PyKiln currently uses micropython 1.12 for the ESP32, so run this command:
+#### Install Micropython:
+`esptool.py --chip esp32 --port COM4 --baud 460800 write_flash -z 0x1000 esp32-idf3-20200902-v1.13.bin`
 
-micropy stubs add esp32-micropython-1.12.0
-micropy init
+### Install ESP32 Micropython Libraries for Visual Studio Code
+
+The stubs allow Visual Studio Code to autocomplete and check syntax for built in libraries for Micropython. As of right now the latest stub available is for version 1.12, so that's what I'm using. If you know how get version 1.13 working let me know!
+
+
+Open a command window in the PyKiln project.
+
+Run this to list out all the available Micropython stubs for esp32:
+`micropy stubs search esp32`
+
+PyKiln uses micropython 1.13, but the 1.13 stubs are not currently available to download so use 1.12 for now:
+
+`micropy stubs add esp32-micropython-1.12.0`
+`micropy init`
 
 Press enter to accept PyKiln as the project name.
 
@@ -47,38 +109,26 @@ Press the down arrow key and then press spacebar to select Pymakr, and Pylint, t
 
 Press spacebar to select esp32-micropython-1.12.0, and then press enter
 
-Plug your ESP32 Dev Kit into a USB port on your computer
+### Uploading Code to ESP32 in Visual Studio Code
 
-Open the project in visual studio, press CTRL + SHIFT + P to bring up the search
-Search for Python: Select Interpreter and then select Python 3.7 or newer
-Search for Python: Select Linter and then select pylint
-Search for Pymakr > Global Settings
-
-Open Device Manager to find the COM port used by your ESP32, it should be labeled Silicon Labs. In my case it's COM4
-
-To find it on Linux, run this command:
-ls /dev/tty*
-
-On Mac run this command:
-ls /dev/cu.*
-
-More info here if you're having trouble getting connected over Serial:
-https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/establish-serial-connection.html
-
-In the global settings set "address" to be your serial port, also set "auto_connect" to false
-
-Press CTRL + SHIFT + P and search for pymaker > connect
-
-Running that will now connect you to your esp32 over serial
-
+- Plug your ESP32 Dev Kit into a USB port on your computer
+- Open the PyKiln project in Visual Studio Code
+- Press CTRL+SHIFT+P to bring up the search
+- Search for Python: Select Interpreter and then select Python 3.7 or newer
+- Search for Python: Select Linter and then select pylint
+- Search for Pymakr > Global Settings
+- - set **address** to be your serial port
+- - set **auto_connect** to false
+- Press CTRL+SHIFT+P and search for pymaker > connect, this connects to your ESP32 over serial
 
 If you need to manage the files on the ESP32 run this command to get a remote shell connection:
+`rshell -p COM4`
 
-rshell -p COM4
+To view the files on the ESP32 you can change directory and list the files with these commands:
+`cd /pyboard/`
+`ls`
 
-switch to the pyboard directory and list the files:
+You can copy, remove, rename, and create new files like you would in a Linux terminal.
 
-cd /pyboard/
-ls
-
-
+In the **setup-esp32.py** file at the end it does an rsync to copy over the files in the src folder to the ESP32.
+`rsync src/ /pyboard/`

@@ -3,7 +3,6 @@ import max31856
 import settings
 
 pins = [4, 16, 17, 5]
-# change 17 to 32
 csPins = []
 count = 0
 for i in pins:
