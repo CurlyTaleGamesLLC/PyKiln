@@ -19,6 +19,7 @@ This project is not complete just yet, but feedback and contributors are welcome
 # Getting Started
 
 [Install Micropython + PyKiln on an ESP32](/getting-started.md "Install Micropython + PyKiln on an ESP32")
+
 [Installing Development Tools](/gettings-started.md "Installing Development Tools")
 
 ## Inspiration

@@ -49,11 +49,14 @@ Open Visual Studio Code, then click on the Extensions button and search and inst
 
 ### Python Libraries
 Open command prompt in project directory
+
 `pip3 install esptool`
+
 `pip3 install --upgrade micropy-cli`
 
 ### Micropython firmware for the ESP32:
 Included in this project is the following build:
+
 **GENERIC : esp32-idf3-20200902-v1.13.bin**
 
 [For the latest firmware please check the micropython website.](https://micropython.org/download/esp32/ "For the latest firmware please check the micropython website.")
@@ -65,14 +68,19 @@ Here is how to manually flash Micropython onto an ESP32, or you can also  use th
 #### Find Your Serial Port
 
 **Windows**
+
 Open Device Manager to find the COM port used by your ESP32, it should be labeled Silicon Labs. In my case it's COM4
 
 **Linux**
+
 To find it on Linux, run this command:
+
 `ls /dev/tty*`
 
 **Mac OS**
+
 On Mac run this command:
+
 `ls /dev/cu.*`
 
 More info here if you're having trouble getting connected over Serial:
@@ -81,7 +89,9 @@ https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/establis
 
 #### Erase everything on the ESP32:
 Hold down the BOOT button on the ESP32 and run this command:
+
 `esptool.py --chip esp32 --port COM4 erase_flash`
+
 Once a connection has been established you can let go of the BOOT button
 
 #### Install Micropython:
@@ -95,11 +105,13 @@ The stubs allow Visual Studio Code to autocomplete and check syntax for built in
 Open a command window in the PyKiln project.
 
 Run this to list out all the available Micropython stubs for esp32:
+
 `micropy stubs search esp32`
 
 PyKiln uses micropython 1.13, but the 1.13 stubs are not currently available to download so use 1.12 for now:
 
 `micropy stubs add esp32-micropython-1.12.0`
+
 `micropy init`
 
 Press enter to accept PyKiln as the project name.
@@ -122,13 +134,17 @@ Press spacebar to select esp32-micropython-1.12.0, and then press enter
 - Press CTRL+SHIFT+P and search for pymaker > connect, this connects to your ESP32 over serial
 
 If you need to manage the files on the ESP32 run this command to get a remote shell connection:
+
 `rshell -p COM4`
 
 To view the files on the ESP32 you can change directory and list the files with these commands:
+
 `cd /pyboard/`
+
 `ls`
 
 You can copy, remove, rename, and create new files like you would in a Linux terminal.
 
 In the **setup-esp32.py** file at the end it does an rsync to copy over the files in the src folder to the ESP32.
+
 `rsync src/ /pyboard/`
