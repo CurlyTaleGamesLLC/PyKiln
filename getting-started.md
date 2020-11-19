@@ -99,8 +99,7 @@ Once a connection has been established you can let go of the BOOT button
 
 ### Install ESP32 Micropython Libraries for Visual Studio Code
 
-The stubs allow Visual Studio Code to autocomplete and check syntax for built in libraries for Micropython. As of right now the latest stub available is for version 1.12, so that's what I'm using. If you know how get version 1.13 working let me know!
-
+The latest version of micropy cli doesn't support version micropython 1.13. So, I've included the stubs and visual studio settings in this repo, but below are the steps for installing v1.12.0.
 
 Open a command window in the PyKiln project.
 

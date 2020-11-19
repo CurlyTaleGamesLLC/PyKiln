@@ -144,12 +144,12 @@ dmypy.json
 ### Micropy Cli ###
 .micropy/
 !micropy.json
+!src/lib
 
-.pylintrc
+
 .vscode/*
-
 docs/pykiln/imgs/src
 docs/pykiln/css/fontawesome-free-5.11.2-web
 
-
-
+src/installlibs.py
+src/blink.py

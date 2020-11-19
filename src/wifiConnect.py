@@ -1,10 +1,8 @@
 import machine
 import network
 import ubinascii
-import ubinascii
 import utime
 import settings
-
 
 ip = ""
 

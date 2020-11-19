@@ -1,20 +1,13 @@
 # main.py
-import gc
+# import gc
 import uos
 import ujson
 import machine
 import utime
 import settings
 
-# Connect to WiFi
-import wifiConnect
-wifiConnect.setup()
+# import blink
 
-# Install Dependencies
-import install
-
-import ulogging
-import utemplate
 import uasyncio
 import picoweb
 
@@ -23,10 +16,15 @@ import temperature
 import speaker
 import led
 
+# Connect to WiFi
+import wifiConnect
+wifiConnect.setup()
+
 
 def df():
     s = uos.statvfs('//')
     return ('{0} MB'.format((s[0]*s[3])/1048576))
+
 
 print("Filespace Available: " + df())
 
@@ -69,7 +67,7 @@ def api_configure(req, resp):
         settings.Connect(req.form["wifi"], req.form["password"], req.form["host"])
         print(settings.data)
 
-        uasyncio.run(reboot_delay())       
+        # uasyncio.run(reboot_delay())       
     else:
         yield from picoweb.http_error(resp, "405")
         yield from resp.aclose()
