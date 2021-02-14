@@ -153,3 +153,8 @@ docs/pykiln/css/fontawesome-free-5.11.2-web
 
 src/installlibs.py
 src/blink.py
+
+src/wifi.json
+src/ip.txt
+
+notes.txt

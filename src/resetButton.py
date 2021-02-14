@@ -19,3 +19,5 @@ async def CheckButton():
 loop = uasyncio.get_event_loop()
 loop.create_task(CheckButton())  # schedule asap
 loop.run_forever()
+
+# pretty sure I can delete this since wifi is now set up through command line

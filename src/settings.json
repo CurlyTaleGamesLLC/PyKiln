@@ -1,9 +1,4 @@
 {
-    "network":{
-        "wifi":"Hey You Kids Get Off Our LAN!",
-        "password":"1234567890",
-        "host":""
-    },
     "ip":"",
     "configured":true,
     "kiln":{
@@ -18,5 +13,5 @@
         "volts":120,
         "cost":0.14
     },
-    "email":"curlytalegames@gmail.com"
+    "email":""
 }

@@ -45,7 +45,6 @@ If you're interested in customizing or helping with the development of PyKiln he
 Open Visual Studio Code, then click on the Extensions button and search and install the following extensions:
 - python
 - pymakr
-- pylint
 
 ### Python Libraries
 Open command prompt in project directory

@@ -1,0 +1,1 @@
+py -3 .\setup_esp32.py
