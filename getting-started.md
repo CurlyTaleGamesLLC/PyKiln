@@ -1,7 +1,7 @@
 # Getting Started
 
 
-This is an open source hardware and software project, and before you can get your hands dirty you will need some parts to test things out. [Here is a list of everything you will need.](http://pykiln.com/get-started.html "Here is a list of everything you will need.")
+This is an open source hardware and software project, and before you can get your hands dirty you will need some parts to test things out. [Here is a list of everything you will need.](https://pykiln.com/get-started.html "Here is a list of everything you will need.")
 
 ## Install Micropython + PyKiln on an ESP32
 
@@ -10,13 +10,13 @@ This is an open source hardware and software project, and before you can get you
 
 Download and upzip the PyKiln repository to your computer.
 
-Included in the repository is a python script that will automatically download the required libraries, erase your ESP32, write the Micropython firmware, and then copy the PyKiln files in the src folder to the ESP32. 
+Included in the repository is a python script that will automatically download the required libraries, erase your ESP32, write the Micropython firmware, and then copy the PyKiln files in the src folder to the ESP32. It will also prompt you for your WiFi network name and password. By default PyKiln will connect to GitHub Pages to load a web page to control your kiln. More info below if you want to host the page on your local network.
 
-The script is called **setup-esp32.py**
+The script is called **setup_esp32.py**
 
 #### Windows
 
-To run the python script you can double click the **setup-esp32-windows.bat** file
+To run the python script you can double click the **setup_esp32-windows.bat** file
 
 #### Mac OS and Linux
 Open terminal and CD to the PyKiln directory and run:
@@ -27,6 +27,13 @@ Open terminal and CD to the PyKiln directory and run:
 
 After you have installed Micropython and PyKiln on your ESP32 you are all set to start using it. The instructions below are for developers who want to work on the project.
 
+## How to Locally Host PyKiln
+
+Hosting the PyKiln webpage on your local network is useful if you don't have an internet connection, or are worried about losing internet connection and not being able to control your kilns. Most people should be fine with using GitHub Pages to load the PyKiln webpage.
+
+If you're still interested in hosting the page locally here is how you can do it. 
+
+In the docs>pykiln folder in this repository you will find a file called **MultithreadedSimpleHTTPServer.py**. If you run it it will start a simple web server on your computer. You can then open a web browser on any device on your nextwork and go to the IP address of your computer to see the PyKiln webpage.
 
 ------------
 
@@ -146,3 +153,17 @@ You can copy, remove, rename, and create new files like you would in a Linux ter
 In the **setup-esp32.py** file at the end it does an rsync to copy over the files in the src folder to the ESP32.
 
 `rsync src/ /pyboard/`
+
+------------
+
+## API Documentation
+
+This is still a work in progress, but I've started to put together a Swagger UI for testing and documentation
+[Swagger API Documentation](/docs/swagger/ "Swagger API Documentation")
+
+------------
+
+## Component Diagram
+
+This is a high level overview of all the components that go into setting up a PyKiln
+![PyKiln Component Diagram](/wiring/pykiln-component-diagram.png)

@@ -23,7 +23,7 @@ This project is not complete just yet, but feedback and contributors are welcome
 [Installing Development Tools](/gettings-started.md "Installing Development Tools")
 
 ## Inspiration
-This project was written from scratch, twice now actually, it used to run on a Raspberry Pi, but is being ported over to run on a ESP32 running Micropython. That said I wanted to give some shout outs to some people and projects that I've referenced:
+This project was written from scratch, three times now actually, it used to run on a Raspberry Pi, but is being ported over to run on a ESP32 running Micropython. That said I wanted to give some shout outs to some people and projects that I've referenced:
 
 - https://github.com/jbruce12000/kiln-controller
 - https://github.com/apollo-ng/picoReflow
