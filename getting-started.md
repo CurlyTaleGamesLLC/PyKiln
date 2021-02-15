@@ -159,7 +159,7 @@ In the **setup-esp32.py** file at the end it does an rsync to copy over the file
 ## API Documentation
 
 This is still a work in progress, but I've started to put together a Swagger UI for testing and documentation
-[Swagger API Documentation](/docs/swagger/ "Swagger API Documentation")
+[Swagger API Documentation](https://pykiln.com/swagger/ "Swagger API Documentation")
 
 ------------
 

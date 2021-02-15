@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en" class="h-100">
+
+<head>
+
+    <title>PyKiln</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="favicon.ico">
+
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <!--Vue 2.6-->
+    <script src="js/vue.js"></script>
+    <script src="js/axios.min.js"></script>
+
+    <script src="js/Sortable.min.js"></script>
+    <script src="js/vuedraggable.umd.min.js"></script>
+
+    <!--Bootstrap + JQuery-->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!--link rel="stylesheet" href="css/bootstrap.min.slate.css">-->
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+
+    <!--Font Awesome-->
+    <link href="css/all.min.css" rel="stylesheet">
+
+    <!--ChartJS-->
+    <script src="js/moment.min.js"></script>
+    <script src="js/Chart.min.js"></script>
+    <script src="js/utils.js"></script>
+
+    <script src="js/charts.js"></script>
+
+
+    <!--PiKiln JS and CSS-->
+    <link rel="stylesheet" href="css/styles.css">
+
+    <style>
+        .button {
+            margin-top: 35px;
+        }
+        
+        .flip-list-move {
+            transition: transform 0.5s;
+        }
+        
+        .no-move {
+            transition: transform 0s;
+        }
+        
+        .ghost {
+            opacity: 0.5;
+            background: #c8ebfb;
+        }
+        
+        .list-group {
+            min-height: 20px;
+        }
+        
+        .list-group-item {
+            cursor: move;
+        }
+        
+        .list-group-item i {
+            cursor: pointer;
+        }
+        
+        .button {
+            margin-top: 35px;
+        }
+        
+        .handle {
+            float: left;
+            padding-top: 8px;
+            padding-bottom: 8px;
+        }
+        
+        .close {
+            float: right;
+            padding-top: 8px;
+            padding-bottom: 8px;
+        }
+        
+        input {
+            display: inline-block;
+            width: 50%;
+        }
+        
+        .text {
+            margin: 20px;
+        }
+    </style>
+
+</head>
+
+<body class="d-flex flex-column h-100">
+    <div class="main-container" id="app">
+        <div class="row">
+
+            <div class="col-1">
+                <button class="btn btn-secondary button" @click="add">Add</button>
+            </div>
+
+            <draggable tag="ul" :list="list" class="list-group" handle=".handle" v-bind="dragOptions" @start="isDragging = true" @end="isDragging = false">
+                <transition-group type="transition" name="flip-list">
+                    <li class="list-group-item" v-for="(element, idx) in list" :key="element.name">
+                        <i class="fa fa-align-justify handle"></i>
+
+                        <span class="text">{{ element.name }} </span>
+
+                        <input type="text" class="form-control" v-model="element.text" />
+
+                        <i class="fa fa-times close" @click="removeAt(idx)"></i>
+                    </li>
+                </transition-group>
+            </draggable>
+
+
+        </div>
+
+    </div>
+
+
+    <script src="js/pykiln-vue4.js"></script>
+
+</body>
+
+
+
+</html>
