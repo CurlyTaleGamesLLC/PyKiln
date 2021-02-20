@@ -1,0 +1,53 @@
+.button {
+    margin-top: 35px;
+}
+
+.flip-list-move {
+    transition: transform 0.5s;
+}
+
+.no-move {
+    transition: transform 0s;
+}
+
+.ghost {
+    opacity: 0.5;
+    background: #c8ebfb;
+}
+
+.list-group {
+    min-height: 20px;
+}
+
+.list-group-item {
+    cursor: move;
+}
+
+.list-group-item i {
+    cursor: pointer;
+}
+
+.button {
+    margin-top: 35px;
+}
+
+.handle {
+    float: left;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.close {
+    float: right;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+input {
+    display: inline-block;
+    width: 50%;
+}
+
+.text {
+    margin: 20px;
+}
