@@ -1,12 +1,12 @@
 const message = [
-  "vue.draggable",
-  "draggable",
-  "component",
-  "for",
-  "vue.js 2.0",
-  "based",
-  "on",
-  "Sortablejs"
+    "vue.draggable",
+    "draggable",
+    "component",
+    "for",
+    "vue.js 2.0",
+    "based",
+    "on",
+    "Sortablejs"
 ];
 
 var app = new Vue({
@@ -16,45 +16,44 @@ var app = new Vue({
     },
     data: {
         list: [
-            { name: "John 1", text:"", id: 0 },
-            { name: "Joao 2", text:"", id: 1 },
-            { name: "Jean 3", text:"", id: 2 }
-          ],
-          sort:'',
-          isDragging:'',
-          id:2,
-        myArray:[
-            {
-                id:0,
-                name:"ben0"
+            { name: "John 1", text: "", id: 0 },
+            { name: "Joao 2", text: "", id: 1 },
+            { name: "Jean 3", text: "", id: 2 }
+        ],
+        sort: '',
+        isDragging: '',
+        id: 2,
+        myArray: [{
+                id: 0,
+                name: "ben0"
             },
             {
-                id:1,
-                name:"ben1"
+                id: 1,
+                name: "ben1"
             },
             {
-                id:2,
-                name:"ben2"
+                id: 2,
+                name: "ben2"
             },
             {
-                id:3,
-                name:"ben3"
+                id: 3,
+                name: "ben3"
             }
         ],
-        drag:'',
-        firing:{
-            status:'idle',
-            name:'test firing',
-            segment:0,
-            error:"",
-            timeRemaining:""
+        drag: '',
+        firing: {
+            status: 'idle',
+            name: 'test firing',
+            segment: 0,
+            error: "",
+            timeRemaining: ""
         },
-        pages:{
-            current:"index",
-            nav:"",
-            id:-1
+        pages: {
+            current: "index",
+            nav: "",
+            id: -1
         },
-        ctemp:20
+        ctemp: 20
     },
     methods: {
         // add: function() {
@@ -71,30 +70,30 @@ var app = new Vue({
         // },
 
         removeAt(idx) {
-          this.list.splice(idx, 1);
+            this.list.splice(idx, 1);
         },
         add: function() {
-          this.id++;
-          //let id = this.id;
-          this.list.push({ name: "Juan " + this.id, text:"", id: this.id});
-          // this.list.push({ name: "Juan " + this.id, id, text: "" });
+            this.id++;
+            //let id = this.id;
+            this.list.push({ name: "Juan " + this.id, text: "", id: this.id });
+            // this.list.push({ name: "Juan " + this.id, id, text: "" });
         }
-      },
-    mounted(){
+    },
+    mounted() {
         //console.log(getParameterByName("ip"));
         //this.system.ip = getParameterByName("ip");
     },
     computed: {
-      dragOptions() {
-        return {
-          animation: 0,
-          group: "description",
-          disabled: false,
-          ghostClass: "ghost"
-        };
-      },
-      draggingInfo() {
-        return this.dragging ? "under drag" : "";
-      }
+        dragOptions() {
+            return {
+                animation: 0,
+                group: "description",
+                disabled: false,
+                ghostClass: "ghost"
+            };
+        },
+        draggingInfo() {
+            return this.dragging ? "under drag" : "";
+        }
     }
-  });
+});

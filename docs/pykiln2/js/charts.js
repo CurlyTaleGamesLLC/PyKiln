@@ -5,25 +5,44 @@ var firingChart;
 var testdata = [{ x: 0, y: 127 }, { x: .1, y: 140 }, { x: .2, y: 135 }, { x: .5, y: 150 }];
 var testdata2 = [{ x: 0, y: 200 }, { x: .1, y: 220 }, { x: .2, y: 222 }, { x: .5, y: 240 }];
 
-export function Init() {
+export function Init(isLog) {
+
+
+    let myDatasets = [];
+    myDatasets.push({
+            data: testdata2,
+            label: "Firing Schedule",
+            borderColor: "#9c27b0",
+            fill: false,
+            lineTension: 0.1
+        }
+    );
+
+    if(isLog){
+        myDatasets.push({
+            data: testdata,
+            label: "Actual Temperature",
+            borderColor: "#ea2c6d",
+            borderDash: [5, 5],
+            fill: false,
+            lineTension: 0.1
+            }
+        );
+    }
+
+    // let testDataSet = {
+    //     data: testdata,
+    //     label: "Actual Temperature",
+    //     borderColor: "#ea2c6d",
+    //     borderDash: [5, 5],
+    //     fill: false,
+    //     lineTension: 0.1
+    // };
 
     firingChart = new Chart(document.getElementById("line-chart"), {
         type: 'line',
         data: {
-            datasets: [{
-                data: testdata2,
-                label: "Firing Schedule",
-                borderColor: "#9c27b0",
-                fill: false,
-                lineTension: 0.1
-            }, {
-                data: testdata,
-                label: "Actual Temperature",
-                borderColor: "#ea2c6d",
-                borderDash: [5, 5],
-                fill: false,
-                lineTension: 0.1
-            }]
+            datasets: myDatasets
         },
         options: {
             scales: {
@@ -73,6 +92,8 @@ export function SetData(scheduleData) { //, actualData
     console.log(firingChart);
 
     console.log(ScheduleToXY(scheduleData));
+
+    //todo - don't display graph if 0 firing segments
 
     firingChart.data.datasets[0].data = ScheduleToXY(scheduleData);
     //firingChart.data.datasets[1].data = [0, 40, 10, 20, 80, 10, 200];

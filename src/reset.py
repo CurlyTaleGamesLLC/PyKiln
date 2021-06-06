@@ -1,3 +1,3 @@
 import machine
 machine.reset()
-# this script is used to reset the ESP32 when it's being flash
+# this script is used to reset the ESP32 when it's being flashed

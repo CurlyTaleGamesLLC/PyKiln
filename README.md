@@ -39,8 +39,7 @@ We stand on the shoulders of giants. I used many libraries to piece together thi
 * [Swagger UI](https://github.com/swagger-api/swagger-ui "Swagger UI")
 * [MAX31856 MicroPython](https://github.com/alinbaltaru/max31856 "MAX31856 MicroPython")
 * [picoweb](https://github.com/pfalcon/picoweb "picoweb")
-
-
+* [Cookie Consent](https://github.com/osano/cookieconsent "Cookie Consent")
 
 
 ## Inspiration
