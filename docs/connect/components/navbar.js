@@ -4,7 +4,7 @@ Vue.component('navbar', {
     <nav class="navbar navbar-inverse navbar-expand-lg bg-dark">
         <div class="container">
             <div class="navbar-translate">
-                <a class="navbar-brand" @click="browse($event, 'home')" href="#0"><img src="/img/pykiln-white-logo.svg" height="25px"> <!-- <i class="fas fa-burn"></i> PyKiln --></a>
+                <a class="navbar-brand" @click="browse($event, 'home')" href="#0"><img src="./img/pykiln-white-logo.svg" height="25px"> <!-- <i class="fas fa-burn"></i> PyKiln --></a>
                 <!-- <div class="d-lg-none">100°F | 100°F | 100°F</div> -->
                 <div class="col mb-1 text-center d-lg-none">
                     <i class="fas fa-thermometer-half temp-icon"></i>

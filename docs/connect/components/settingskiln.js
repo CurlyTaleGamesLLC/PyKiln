@@ -31,8 +31,8 @@ Vue.component('settingskiln', {
 
             <div class="w-60 kilnsettings">
                 <img class="kilnicons-base" src="img/kiln-base.svg">
-                <img class="kilnicons" :src="'/img/kiln-zones-' + kiln.zoneCount + '.svg'">
-                <img class="kilnicons" :src="'/img/kiln-temp-' + kiln.sensorCount + '.svg'">
+                <img class="kilnicons" :src="'./img/kiln-zones-' + kiln.zoneCount + '.svg'">
+                <img class="kilnicons" :src="'./img/kiln-temp-' + kiln.sensorCount + '.svg'">
             </div>
 
             <div class="w-20 text-center">
