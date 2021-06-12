@@ -1,7 +1,7 @@
 @echo off
 set "installed=false"
 
-where python3z >nul 2>&1 && set "installed=true"
+where python3 >nul 2>&1 && set "installed=true"
 if "%installed%" == "true" (
     python3 ./pykiln_setup.py
     exit /b
