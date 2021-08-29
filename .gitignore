@@ -164,3 +164,7 @@ docs/ux/wireframe.xd
 docs/material-kit/*
 
 pcb/*
+pcb/kicad/ltc4311/*
+3d/*
+
+src/pid/*

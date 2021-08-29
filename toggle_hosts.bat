@@ -3,13 +3,13 @@ set "installed=false"
 
 where py >nul 2>&1 && set "installed=true"
 if "%installed%" == "true" (
-    py -3 ./MultithreadedSimpleHTTPServer.py
+    py -3 ./toggle_hosts.py
     exit /b
 )
 
 where python3 >nul 2>&1 && set "installed=true"
 if "%installed%" == "true" (
-    python3 ./MultithreadedSimpleHTTPServer.py
+    python3 ./toggle_hosts.py
     exit /b
 )
 

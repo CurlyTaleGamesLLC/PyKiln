@@ -2,6 +2,9 @@ import machine
 import uasyncio
 import settings
 
+# This script needs to be turned into a class, 
+# and it needs to use the mcp230xx library to use i2c instead of the ESP32's GPIO pin
+
 pins = [12, 13, 27, 26, 25, 33, 32]
 # change GPIO14, it is on by default when ESP32 reboots
 # change 14 it to pin 13

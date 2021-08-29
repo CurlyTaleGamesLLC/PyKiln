@@ -1,15 +1,15 @@
 @echo off
 set "installed=false"
 
-where python3 >nul 2>&1 && set "installed=true"
-if "%installed%" == "true" (
-    python3 ./pykiln_setup.py
-    exit /b
-)
-
 where py >nul 2>&1 && set "installed=true"
 if "%installed%" == "true" (
     py -3 ./pykiln_setup.py
+    exit /b
+)
+
+where python3 >nul 2>&1 && set "installed=true"
+if "%installed%" == "true" (
+    python3 ./pykiln_setup.py
     exit /b
 )
 

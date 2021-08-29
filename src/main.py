@@ -4,14 +4,13 @@ import uos
 import ujson
 import machine
 import utime
-import settings
 
-# import blink
 
 import uasyncio
 import picoweb
 
 # Custom Libraries
+import settings
 import temperature
 import speaker
 import led
@@ -20,13 +19,16 @@ import led
 import wifi
 wifi.setup()
 
+pykilnSettings = settings.settings()
+notificationSpeaker = speaker.speaker()
+notificationLED = led.led()
 
 app = picoweb.WebApp(__name__)
 
 @app.route("/")
 def index(req, resp):
     # redirect to "/"
-    hostURL = "http://pykiln.com/pykiln/"
+    hostURL = "https://pykiln.com/connect/"
     if wifi.wifi.host == "":
         hostURL = "http://" + wifi.wifi.host + "/pykiln/"
     
@@ -49,7 +51,7 @@ def api_led(req, resp):
         print("Test RGB LED")
         yield from picoweb.http_error(resp, "200") # success!
         yield from resp.aclose()
-        led.Error()
+        notificationLED.Error()
     else:
         yield from picoweb.http_error(resp, "405") 
         yield from resp.aclose()
@@ -61,7 +63,7 @@ def api_speaker(req, resp):
         print("Test Piezo Speaker")
         yield from picoweb.http_error(resp, "200") # success!
         yield from resp.aclose()
-        speaker.PlayFinished()
+        notificationSpeaker.PlayFinished()
     else:
         yield from picoweb.http_error(resp, "405")
         yield from resp.aclose()

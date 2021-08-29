@@ -38,6 +38,7 @@ We stand on the shoulders of giants. I used many libraries to piece together thi
 * [MultithreadedSimpleHTTPServer](https://github.com/Nakiami/MultithreadedSimpleHTTPServer "MultithreadedSimpleHTTPServer")
 * [Swagger UI](https://github.com/swagger-api/swagger-ui "Swagger UI")
 * [MCP9600 MicroPython](https://github.com/CurlyTaleGamesLLC/Adafruit_MicroPython_MCP9600 "MCP9600 MicroPython")
+* [micropython-mcp230xx](https://github.com/ShrimpingIt/micropython-mcp230xx "MCP230xx MicroPython")
 * [picoweb](https://github.com/pfalcon/picoweb "picoweb")
 * [Cookie Consent](https://github.com/osano/cookieconsent "Cookie Consent")
 

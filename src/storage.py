@@ -23,57 +23,53 @@ class logging:
 
     _newLine = "\r\n"
 
-    # sdPath="/sd" <- might need to remove trailing slash
     def __init__(self, sdPath="/sd/", maxLogs=5):
         self.sdPath = sdPath
+        self.root = "/"
         self.maxLogs = maxLogs
         self.line = ""
         self.logFile = None
         self.sdcard = None
+        self.connected = False
         print(sdPath)  
 
     def Connect(self, slot=2):
-        self.sdcard = machine.SDCard(slot=slot)
-        uos.mount(self.sdcard, self.sdPath)
-        print(uos.listdir(self.sdPath))
-        uos.chdir(self.sdPath)
-        # logLength = len(uos.listdir(self.sdPath))
+        try:
+            self.sdcard = machine.SDCard(slot=slot)
+            uos.mount(self.sdcard, self.sdPath)
+            print(uos.listdir(self.sdPath))
+            uos.chdir(self.sdPath)
+            self.connected = True
+            # logLength = len(uos.listdir(self.sdPath))
+        except:
+            print("Could not connect to SD card")
+            self.connected = False
+
+        
 
     # this isn't currently working
     def Disconnect(self):
-        uos.chdir('/')
-        uos.umount(self.sdPath)
+        if self.connected:
+            uos.chdir(self.root)
+            uos.umount(self.sdPath)
 
-    # def LogList():
+    def LogList(self):
+        # this could probably be cached, and updated only when a new log is created
 
-    #     with open("loglist.csv", 'w') as filetowrite:
-    #         filetowrite.write('new content')
-
-
-    #     line = ""
-    #     # check if file exists
-    #     if "loglist.csv" in uos.listdir('/sd'):
-    #         # log file exists, append to it
-    #         append_write = 'a'
-    #         line += ","
-    #         file1 = open('/sd/loglist.csv')
-    #         # file1lines = file1.readlines()
-    #         # file1.read()
-    #         logFileData = file1.readline()
-    #         print(logFileData)
-    #         logCounts = logFileData.split(",")
-    #         logCountLength = len(logCounts)
-    #         print(logCounts)
-    #         line += str(int(logCounts[logCountLength - 1]) + 1)
-
-    #     else:
-    #         append_write = 'w' # write new file
-    #         line += str(1)
-
+        # Don't get the lst of log files if the SD card isn't connected
+        if not self.connected:
+            return
         
-    #     logFile = open("/sd/loglist.csv", append_write)
-    #     logFile.write(line)
-    #     logFile.close()
+        uos.chdir(self.sdPath)
+        logfiles = uos.listdir(self.sdPath)
+        for log in logfiles:
+            print(log)
+            if not log.endswith(".csv"):
+                logfiles.remove(log)
+
+        uos.chdir(self.root)
+        
+        return logfiles
 
     def Log(self, filename, logData):
         """
@@ -81,6 +77,12 @@ class logging:
         Requires the name of the CSV file to write to
         Requires an array of temperatures, the first one is the target temperature
         """
+
+        # Don't log anything if the SD card isn't connected
+        if not self.connected:
+            # print("Not Connected to SD card, can't log")
+            return
+
         # Check if file exists or not
         uos.chdir(self.sdPath)
         self.line = ""
@@ -97,24 +99,58 @@ class logging:
         self.logFile = open(filename, 'a')
         self.logFile.write(self.line)
         self.logFile.close()
+        uos.chdir(self.root)
 
     def Read(self, filename):
-        # uos.chdir(self.sdPath)
+        # Don't read anything if the SD card isn't connected
+        if not self.connected:
+            return
+
+        uos.chdir(self.sdPath)
         # Reads Each Line
         self.line = ""
         for line in open(filename):
             self.line += line
         print(self.line)
+        uos.chdir(self.root)
 
     def DeleteOldestLog(self):
+        # Don't delete anything if the SD card isn't connected
+        if not self.connected:
+            return
+        
         logLength3 = len(uos.listdir(self.sdPath))
         if logLength3 > 8:
             uos.remove()
 
     def DeleteAll(self):
+        # Don't delete anything if the SD card isn't connected
+        if not self.connected:
+            return
+
         uos.chdir(self.sdPath)
         logFiles = uos.listdir()
         logLength2 = len(logFiles)
+
         for i in range(logLength2):
-            if logFiles[i] != 'System Volume Information':
-                uos.remove(logFiles[i])
+            if not logFiles[i].endswith(".csv"):
+                # if logFiles[i] != 'System Volume Information':
+                rm(logFiles[i])
+                # try:
+                #     uos.remove(logFiles[i])
+                # except:
+                #     uos.rmdir(logFiles[i])
+        
+        uos.chdir(self.root)
+
+def rm(d):  # Remove file or tree
+    try:
+        if uos.stat(d)[0] & 0x4000:  # Dir
+            for f in uos.ilistdir(d):
+                if f[0] not in ('.', '..'):
+                    rm("/".join((d, f[0])))  # File or Dir
+            uos.rmdir(d)
+        else:  # File
+            uos.remove(d)
+    except:
+        print("rm of '%s' failed" % d)

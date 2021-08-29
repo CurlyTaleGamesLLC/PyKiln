@@ -1,72 +1,70 @@
+import math
 from machine import ADC, Pin
-import cmath as math
-import utime
 
-adc = None
-currentCorrection = 0
+class Current():
+    """Measures the current of a circuit using a non invasive current sensor. 
+    The AC signal is offset to be in the 0V-3.3V range, and then sampled 
+    with the ADC to find the power usage.
+    """
 
-def Init():
-    global adc
-    global currentCorrection
-    adc = ADC(Pin(34))
-    # print(adc.read())
-    adc.atten(ADC.ATTN_11DB)
-    adc.width(ADC.WIDTH_12BIT)
-    print(adc.read())
-    currentCorrection = Measure()
+    def __init__(self, pin=35, numTurns=2000, samples=1000):
+        """Initialize Non invasive current sensor at specified ADC pin. 
+        Default turns is 2000 for a 100A CT sensor
+        """
+        self.adc = ADC(Pin(pin))
+        self.samples = samples
+        self.currentCorrection = 0
 
-#Function that Calculate Root Mean Square
-# def rmsValue(arr):
-#     square = 0
-#     mean = 0.0
-#     root = 0.0
-#     #Calculate square
-#     for i in range(len(arr)): 
-#         square += (arr[i]**2)
-#     #Calculate Mean
-#     mean = (square / (float)(len(arr))
-#     #Calculate Root
-#     root = cmath.sqrt(mean) 
-#     return root
+        self.reading = 0.0
 
-def Measure():
-    global adc
-    global currentCorrection
-    
-    print("Measure Current Lopp")
-    isReading = True
-    samples = 480 # Measure current for 1/10 of a second
-    reading = 0.0
-    rBurden = 100
-    numTurns = 2000
-    offset = 1.65
-    acc = 0
+        # burden resistor
+        self.rBurden = 100
+        # number of turns of the CT sensor
+        self.numTurns = numTurns
 
-    end_time = utime.ticks_ms()
+        # this is used to remove the DC bias of the AC signal
+        self.offset = 1.65 # half of 3.3V
+        
+        # accumulated value
+        self.acc = 0
 
-    print("samples = " + str(samples))
-    start_time = utime.ticks_ms()
-    for i in range(0, samples):
-        # Read analog value and convert to voltage
-        reading = (adc.read() * 3.3) / 4096.0
-        # Remove the DC offset
-        reading = reading - offset
-        # Calculate the sensed current
-        reading = (reading / rBurden) * numTurns
-        # Square the sensed current
-        acc += reading * reading
+        # set voltage range of ADC to 0-3.6V
+        self.adc.atten(ADC.ATTN_11DB)
+        # set ADC values from 0-4096
+        self.adc.width(ADC.WIDTH_12BIT)
 
-        # uasyncio is too slow, we need to use sleep_us to get the speeds to read a 60 hertz sine wave
-        # this delay and sample rate works out to measuring 6 cycles with 80 samples per cycle
-        # the sleep value is tuned to account for overhead of reading 480 samples in 1/10 a second
-        utime.sleep_us(88)
+        print(self.adc.read())
+        print("Calibrating Current:")
+        self.Calibrate()
 
-    end_time = utime.ticks_ms()
+    def Calibrate(self):
+        # This might needs to removed. Originally I was trying zero out the current sensor
+        # But when there is no current flowing through the wire it isn't generating a magnetic field
+        # So the readings are eratic. It makes more sense to use a simple threshold than try to zero
+        # out eratic data. Once there is current flowing the readings are accurate.
+        self.currentCorrection = 0
+        # self.currentCorrection = self.Measure()
 
-    print(str(utime.ticks_diff(end_time, start_time)))
-    current = math.sqrt(acc / samples)
-    current = current - currentCorrection
-    print("current = " + str(current))
-    return current
 
-Init()
+    def Measure(self):
+        self.acc = 0
+
+        # Read samples as fast as possible to capture an acurate reading of the current
+        for i in range(0, self.samples):
+            # Read analog value and convert to voltage
+            self.reading = (self.adc.read() * 3.3) / 4096.0
+            # Remove the DC offset
+            self.reading = self.reading - self.offset
+            # Calculate the sensed current
+            self.reading = (self.reading / self.rBurden) * self.numTurns
+            # Square the sensed current
+            self.acc += self.reading * self.reading
+
+        # Divide the total squared sensed current by the number of samples, 
+        # and take the square root of that number 
+        self.current = math.sqrt(self.acc / self.samples)
+        # Subtract the calibration current from the result
+        self.current = self.current - self.currentCorrection
+        
+        print('{:.12f}'.format(float(self.current)))
+        return self.current

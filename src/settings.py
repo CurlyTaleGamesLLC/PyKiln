@@ -1,56 +1,53 @@
 import uio
 import ujson
 
-with uio.open("settings.json") as fp:
-    data = ujson.load(fp)
+class settings:
 
-print(ujson.dumps(data))
+    def __init__(self):
+        self.settingsPath = "settings.json"
+        self.settingsFile = None
+        self.data = None
+        self.dataJSON = None
+        self.LoadSettings()
 
-# def hasWiFiNetwork():
-#     global data
-#     return data["network"]["wifi"] != ""
 
-# def Connect(wifi, password, host):
-#     global data
-#     data["network"]["wifi"] = wifi
-#     data["network"]["password"] = password
-#     data["network"]["host"] = host
-#     data["configured"] = False
+    def LoadSettings(self):
+        with uio.open(self.settingsPath) as fp:
+            self.data = ujson.load(fp)
+        self.dataJSON = ujson.dumps(self.data)
+        print(self.dataJSON)
 
-#     WriteSettings()
-# 
-    # with open('settings.json', 'w') as json_file:
-    #     ujson.dump(data, json_file)
-
-def df():
-    s = uos.statvfs('//')
-    return ('{0} MB'.format((s[0]*s[3])/1048576))
     
-print("Filespace Available: " + df())
+    def HasIP(self):
+        return self.data["ip"] != ""
 
-def hasIP():
-    global data
-    return data["ip"] != ""
+    def SetIP(self, ip):
+        self.data["ip"] = ip
+        self.WriteSettings()
 
-# def GetIP():
-#     global data
-#     return data["ip"]
+    def IsConfigured(self):
+        return self.data["configured"]
 
-def SetIP(ip):
-    global data
-    data["ip"] = ip
-    WriteSettings()
+    def SetConfigured(self):
+        self.data["configured"] = True
+        self.WriteSettings()
 
-# def isConfigured():
-#     global data
-#     return data["configured"]
+    def WriteSettings(self):
+        print("Writing Settings:")
+        # Convert python object into JSON object
+        self.dataJSON = ujson.dumps(self.data)
 
-# def SetConfigured():
-#     global data
-#     data["configured"] = True
-#     WriteSettings()
+        # Overwrite the existing settings file with the new JSON data
+        self.settingsFile = open(self.settingsPath, 'w')
+        self.settingsFile.write(self.dataJSON)
+        self.settingsFile.close()
 
-def WriteSettings():
-    global data
-    with open('settings.json', 'w') as json_file:
-        ujson.dump(data, json_file)
+        
+        # with open(self.settingsPath, 'w') as json_file:
+        #     ujson.dump(self.data, json_file)
+
+# def df():
+#     s = uos.statvfs('//')
+#     return ('{0} MB'.format((s[0]*s[3])/1048576))
+
+# print("Filespace Available: " + df())

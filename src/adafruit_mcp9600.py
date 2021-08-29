@@ -208,6 +208,7 @@ class MCP9600:
 
     types = ("K", "J", "T", "N", "S", "E", "B", "R")
 
+    # def __init__(self, address=_DEFAULT_ADDRESS, tctype="K", tcfilter=0):
     def __init__(self, myi2c, address=_DEFAULT_ADDRESS, tctype="K", tcfilter=0):
     # def __init__(self, port, scl, sda, freq, address=_DEFAULT_ADDRESS, tctype="K", tcfilter=0):
         # self.buf = bytearray(3)
@@ -216,8 +217,13 @@ class MCP9600:
         # LOOK AT THIS!!! - Tried to move it but it wouldn't connect anymore... I had SCL and SDA switched by accident, try to decouple this again later
         # move this outside of this function, you'll want to share this same i2c device with multiple sensors later
         # self.i2c_device = I2C(port, scl=Pin(scl), sda=Pin(sda), freq=freq)
+        
         self.i2c_device = myi2c
+        # self.i2c_device = I2C(0, scl=Pin(18), sda=Pin(19), freq=100000)
+        # self.i2c_device = I2C(scl=Pin(18), sda=Pin(19), freq=100000)
+
         self.ADDR = address
+
         # print(myi2c)
         # print(self.i2c_device)
         # self.i2c_device = I2CDevice(i2c, address)
