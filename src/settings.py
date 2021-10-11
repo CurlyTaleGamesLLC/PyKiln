@@ -17,13 +17,13 @@ class settings:
         self.dataJSON = ujson.dumps(self.data)
         print(self.dataJSON)
 
-    
-    def HasIP(self):
-        return self.data["ip"] != ""
 
-    def SetIP(self, ip):
-        self.data["ip"] = ip
-        self.WriteSettings()
+    # def HasIP(self):
+    #     return self.data["ip"] != ""
+
+    # def SetIP(self, ip):
+    #     self.data["ip"] = ip
+    #     self.WriteSettings()
 
     def IsConfigured(self):
         return self.data["configured"]

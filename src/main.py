@@ -5,45 +5,61 @@ import ujson
 import machine
 import utime
 
-
 import uasyncio
 import picoweb
 
 # Custom Libraries
 import settings
-import temperature
+# import temperature
 import speaker
 import led
 
 # Connect to WiFi
 import wifi
-wifi.setup()
+connection = wifi.wifi()
+print(connection.ip)
+# print(connection.wifi.ip)
+print(connection.GetIP())
 
 pykilnSettings = settings.settings()
-notificationSpeaker = speaker.speaker()
-notificationLED = led.led()
+# notificationSpeaker = speaker.speaker()
+# notificationLED = led.led()
 
 app = picoweb.WebApp(__name__)
 
+# def init():
+#     global pyLed
+#     print("Hello World!")
+#     dev = device("PyKilnV1.01")
+
+#     print(dev.led.iodevice)
+#     print(dev.led.pin)
+#     print(dev.led.i2cAddress)
+
+#     i2c = I2C(scl=dev.scl, sda=dev.sda, freq=10000)
+#     print(i2c.scan())
+#     if dev.ioexpander.iodevice == "MCP23008":
+#         io = mcp.MCP23008(i2c, dev.ioexpander.i2cAddress)
+
+#     # LED - why is this blocking? this should be async
+#     pyLed = led(dev.led, io)
+#     pyLed.Error()
+
+# If you try to access the PyKiln by it's IP redirect to the webpage to control it
 @app.route("/")
 def index(req, resp):
-    # redirect to "/"
     hostURL = "https://pykiln.com/connect/"
-    if wifi.wifi.host == "":
-        hostURL = "http://" + wifi.wifi.host + "/pykiln/"
-    
-    headers = {"Location": hostURL + "?ip=" + wifi.ip[0]}
-    
+    headers = {"Location": hostURL + "?ip=" + connection.ip}
     yield from picoweb.start_response(resp, status="303", headers=headers)
 
 
-@app.route("/status")
-def status(req, resp):
-    yield from picoweb.start_response(resp)
-    htmlFile = open('/templates/status.html', 'r')
-    for line in htmlFile:
-        yield from resp.awrite(line)
-    yield from resp.aclose()
+# @app.route("/status")
+# def status(req, resp):
+#     yield from picoweb.start_response(resp)
+#     htmlFile = open('/templates/status.html', 'r')
+#     for line in htmlFile:
+#         yield from resp.awrite(line)
+#     yield from resp.aclose()
 
 @app.route("/api/led")
 def api_led(req, resp):
@@ -109,4 +125,4 @@ async def reboot_delay():
     machine.reset()
     # reboot
 
-app.run(debug=True, port=80, host=wifi.ip[0])
+app.run(debug=True, port=80, host=connection.ip)

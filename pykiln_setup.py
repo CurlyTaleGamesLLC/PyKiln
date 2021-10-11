@@ -35,7 +35,6 @@ progressbar = ""
 
 wifiName = StringVar()
 wifiPassword = StringVar()
-host = StringVar()
 
 # adds background image to splash page
 background_image = PhotoImage(file=os.path.join(assets_folder, 'setup-background.gif'))
@@ -49,16 +48,12 @@ labelFont = tkFont.Font(family='Helvetica', size=9)
 buttonFont = tkFont.Font(family='Helvetica', size=14, weight=tkFont.BOLD)
 
 
-
-
-
 def buttonClick(newPage):
     global container
     global screen
     
     global wifiName
     global wifiPassword
-    global host
     
     page = newPage
 
@@ -121,7 +116,7 @@ def buttonClick(newPage):
 
     if page == "pykiln":
         print("You're on the pykiln page!")
-        settings.WifiLogin(wifiName.get(), wifiPassword.get(), host.get())
+        settings.WifiLogin(wifiName.get(), wifiPassword.get())
         page = "connected"
         settings.SetCurrentPage(page)
         LayoutLoading("Connecting PyKiln", "Almost there, this will take a few minutes. It is copying the PyKiln files onto the ESP32, connecting to your wireless network, and getting an IP address.")
@@ -215,7 +210,6 @@ def LayoutWifi(title, buttonText, pageName):
 
     global wifiName
     global wifiPassword
-    global host
 
     ResetRows()
 
@@ -226,20 +220,19 @@ def LayoutWifi(title, buttonText, pageName):
     # wifi input fields
     Label(container, text="WiFi SSID: ").grid(row=1, sticky="e", padx=(10, 0), pady=10)
     Label(container, text="Password: ").grid(row=2, sticky="e", padx=(10, 0), pady=10)
-    Label(container, text="Host URL (Optional): ").grid(row=3, sticky="e", padx=(10, 0), pady=(10,0))
 
     e1 = Entry(container, textvariable=wifiName, width=50)
     e2 = Entry(container, textvariable=wifiPassword, width=50)
     e2.config(show=bullet)
-    e3 = Entry(container, textvariable=host, width=50)
+    # e3 = Entry(container, textvariable=host, width=50)
 
 
     e1.grid(row=1, column=1, sticky="w", padx=(0,80), pady=10)
     e2.grid(row=2, column=1, sticky="w", padx=(0,80), pady=10)
-    e3.grid(row=3, column=1, sticky="w", padx=(0,80), pady=(10,0))
+    # e3.grid(row=3, column=1, sticky="w", padx=(0,80), pady=(10,0))
 
-    host_text = Label(container, text="Enter the URL for your self hosted web server, if you don't know that this is, leave it blank.", font=labelFont, wraplength=300, justify="left")
-    host_text.grid(row=4, column=1, sticky="nw", pady=0, padx=(0,10))
+    # host_text = Label(container, text="Enter the URL for your self hosted web server, if you don't know that this is, leave it blank.", font=labelFont, wraplength=300, justify="left")
+    # host_text.grid(row=4, column=1, sticky="nw", pady=0, padx=(0,10))
     container.grid_rowconfigure(4, weight=1)
 
     btn = Button(container, text=buttonText, font=buttonFont, command = lambda: buttonClick(pageName))
@@ -408,8 +401,6 @@ def on_closing():       # function run when closing
     screen.destroy()   # then destroy the window
 
 
-
-
 def main():
     print("Hello World!")
 
@@ -421,5 +412,16 @@ settings.SetCurrentPage("splash")
 LayoutLoading("Updating Dependencies", "If this is your first time it might take a minute...")
 
 
+# class PyKilnSetup:
+
+#     def __init__(self):
+#         print("I did it!")
+#         self.test = "test"
+
+# myTest = PyKilnSetup()
+# print(myTest.test)
+
+
 screen.protocol("WM_DELETE_WINDOW", on_closing) # bind a function to close button
 screen.mainloop()
+

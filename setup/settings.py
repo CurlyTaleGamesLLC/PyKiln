@@ -74,11 +74,10 @@ def list_serial_options(isPort):
     else:
         return available_names
 
-def WifiLogin(ssid, password, host):
+def WifiLogin(ssid, password):
     wifiJSON = {
         "ssid": ssid,
-        "password": password,
-        "host": host
+        "password": password
     }
     fpath = os.path.join(src_folder, 'wifi.json')
     f = open(fpath, "w")
@@ -88,7 +87,7 @@ def WifiLogin(ssid, password, host):
 def Diff(li1, li2):
     return (list(list(set(li1)-set(li2)) + list(set(li2)-set(li1))))
 
-def CreatePyKilnShortcut(host, ip):
+def CreatePyKilnShortcut(ip):
 
     desktop = ""
 
@@ -98,11 +97,11 @@ def CreatePyKilnShortcut(host, ip):
         desktop = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop') 
 
     shortcutName = "PyKiln-" + ip + "-(" + str(randrange(99)) + ").url"
-    shortcutURL = ""
-    if host == "":
-        shortcutURL = "http://pykiln.com/"
-    else:
-        shortcutURL = "http://" + host
+    shortcutURL = "http://pykiln.com/connect/"
+    # if host == "":
+    #     shortcutURL = "http://pykiln.com/"
+    # else:
+    #     shortcutURL = "http://" + host
 
     f = open(os.path.join(desktop, shortcutName), "w")
     f.write("[InternetShortcut]\n")

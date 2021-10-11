@@ -1,0 +1,137 @@
+<html>
+    <head>
+        <title>PyKiln QR Code Link</title>
+        <script src="js/qrcode.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="./assets/css/material-fonts.css" />
+        <style>
+
+            @font-face {
+                font-family: 'Roboto';
+                src: url('./assets/css/Roboto/Roboto-Bold.woff2') format('woff2');
+                font-weight: bold;
+                font-style: normal;
+            }
+
+            @font-face {
+                font-family: 'Roboto';
+                src: url('./assets/css/Roboto/Roboto-Regular.woff2') format('woff2');
+                font-weight: normal;
+                font-style: normal;
+            }
+
+            body{
+                font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+                font-weight: normal;
+            }
+
+            .container{
+                border-style: dashed;
+                border-width: 2px;
+                border-color: #ccc;
+                width: 130px;
+                height: 130px;
+                margin: auto;
+                text-align: center;
+            }
+
+            #qrcode{
+                padding: 12px;
+            }
+
+            #qrcode img{
+                display: inline-block !important;
+                width: 80%;
+            }
+
+            #link-text{
+                font-weight: bold;
+                font-size: 15px;
+            }
+
+            #instructions{
+                width: 375px;
+                margin: auto;
+            }
+
+
+            ol > li::marker {
+                font-weight: bold;
+            }
+
+            li{
+                margin: 10px 0;
+            }
+
+            h3{
+                font-weight: bold;
+                margin-top: 1em;
+            }
+
+            .center{
+                text-align: center;
+            }
+
+            @media print
+            {    
+                .no-print, .no-print *
+                {
+                    display: none !important;
+                }
+            }
+
+        </style>
+        <script>
+            var qrLink = "127.0.0.1";
+
+            var url = new URL(window.location.href);
+            var c = url.searchParams.get("ip");
+            console.log(c);
+
+            qrLink = c;
+
+            function Print(){
+                window.print();
+            }
+            
+        </script>
+    </head>
+    <body>
+
+        <div class="container">
+            <div id="qrcode"></div>
+            <div id="link-text">127.0.0.1</div>
+        </div>
+
+        <div id="instructions">
+            <h3 class="center">Instructions</h3>
+            <ol>
+                <li>Print this page at 100%, the dashed outline should measure 34mm x 34mm</li>
+                <li>Cut out the dashed outline</li>
+                <li>Glue to the top left corner of your 3D printed PyKiln case</li>
+                <li id="ip-li">Scan this QR code to access your PyKiln, or open a web browser and go to </li>
+            </ol> 
+            
+            <div class="no-print center">
+                <button  onclick="Print()">Print QR Code</button>    
+            </div>
+            
+        </div>
+
+        <script>
+            
+            document.getElementById("link-text").innerHTML = qrLink;
+            document.getElementById("ip-li").innerHTML += qrLink;
+            
+            var qrcode = new QRCode(document.getElementById("qrcode"), {
+                text: qrLink,
+                width: 256,
+                height: 256,
+                colorDark : "#000000",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.M
+            });
+            
+        </script>
+
+    </body>
+</html>
