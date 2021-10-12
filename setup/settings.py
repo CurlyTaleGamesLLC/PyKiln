@@ -1,5 +1,6 @@
 import os
 import subprocess
+import webbrowser
 import sys
 import json
 import serial.tools.list_ports
@@ -87,6 +88,19 @@ def WifiLogin(ssid, password):
 def Diff(li1, li2):
     return (list(list(set(li1)-set(li2)) + list(set(li2)-set(li1))))
 
+def GetIP():
+    # Open the ip.txt file copied from the ESP32 to your computer
+    ipFilePath = os.path.join(parent, 'ip.txt')
+    ipFile = open(ipFilePath, "r")
+
+    # read the file
+    ipAddress = ipFile.read()
+    print("IP: " + ipAddress)
+
+    # Open your browser and create a desktop shortcut
+    OpenBrowser(ipAddress)
+    CreatePyKilnShortcut(ipAddress)
+
 def CreatePyKilnShortcut(ip):
 
     desktop = ""
@@ -115,7 +129,3 @@ def OpenBrowser(ipURL):
         subprocess.Popen(['open', ipURL])
     else:
         webbrowser.open(ipURL, new=0, autoraise=True)
-
-    # ip = open("ip.txt", "r")
-    # ipURL = "http://" + ip.read()
-    # print("IP = " + ipURL)

@@ -19,8 +19,6 @@ import setup.settings as settings
 base_folder = os.path.dirname(__file__)
 assets_folder = os.path.join(base_folder, 'setup')
 
-
-
 screen = Tk()
 screen.title("PyKiln Setup")
 # set resolution and disable resizing
@@ -56,15 +54,12 @@ def buttonClick(newPage):
     global wifiPassword
     
     page = newPage
-
-
     container.pack_forget()
 
     for widget2 in container.grid_slaves():
         widget2.grid_forget()
         # if int(widget2.grid_info()["row"]) > 6:
             
-
     for widget in container.winfo_children():
         widget.destroy()
 
@@ -116,6 +111,8 @@ def buttonClick(newPage):
 
     if page == "pykiln":
         print("You're on the pykiln page!")
+        # Writes wifi SSID and password to JSON file in the src directory, 
+        # so when the files are copied over it can connect to your network
         settings.WifiLogin(wifiName.get(), wifiPassword.get())
         page = "connected"
         settings.SetCurrentPage(page)
@@ -224,15 +221,10 @@ def LayoutWifi(title, buttonText, pageName):
     e1 = Entry(container, textvariable=wifiName, width=50)
     e2 = Entry(container, textvariable=wifiPassword, width=50)
     e2.config(show=bullet)
-    # e3 = Entry(container, textvariable=host, width=50)
-
 
     e1.grid(row=1, column=1, sticky="w", padx=(0,80), pady=10)
     e2.grid(row=2, column=1, sticky="w", padx=(0,80), pady=10)
-    # e3.grid(row=3, column=1, sticky="w", padx=(0,80), pady=(10,0))
 
-    # host_text = Label(container, text="Enter the URL for your self hosted web server, if you don't know that this is, leave it blank.", font=labelFont, wraplength=300, justify="left")
-    # host_text.grid(row=4, column=1, sticky="nw", pady=0, padx=(0,10))
     container.grid_rowconfigure(4, weight=1)
 
     btn = Button(container, text=buttonText, font=buttonFont, command = lambda: buttonClick(pageName))
@@ -294,6 +286,7 @@ def LayoutLoading(title, content):
     content_text.grid(row=1, column=0, sticky="new", pady=4, padx=16)
     container.grid_rowconfigure(1, weight=1)
 
+    # Resets progress bar and waits until process is finished, then loads the next page.
     progressbar = None
     progressbar = Progress()
 
@@ -358,16 +351,20 @@ class Progress:
             val = self.val.get()
             os.system("rshell -p " + settings.GetActiveSerialPort() + " rsync src/ /pyboard/ ; exit")
             val = self.val.get()
-            os.system("rshell -p " + settings.GetActiveSerialPort() + " repl ~ import reset ~ ; exit")
+            os.system("rshell -p " + settings.GetActiveSerialPort() + " repl ~ import main ~ ; exit")
+            
+            print("Waiting for ESP32 to connect to WiFi...")
+            time.sleep(10)
             self.finish()
             return
 
         if page == "complete":
             val = self.val.get()
+
+            # Get the path to where the IP address will be copied to
             print("IP PATH")
             dirPath = os.getcwd()
             filePath = os.path.join(dirPath, 'ip.txt')
-
             print(filePath)
 
             # convert path to forward slashes and remove the drive letter for REPL
@@ -375,12 +372,14 @@ class Progress:
             if os.name == 'nt':
                 filePathREPL = filePathREPL.replace('C:', '')
 
-            
+            # Copy the ip.txt file from the ESP32 to your computer
             print(filePathREPL)
-            copyCommand = "cp /pyboard/ip.txt " + filePathREPL
+            copyCommand = "cp /pyboard/ip.txt '" + filePathREPL + "'"
             os.system("rshell -p " + settings.GetActiveSerialPort() + " " + copyCommand + " ; exit")
             os.system("rshell -p " + settings.GetActiveSerialPort() + " repl ~ import reset ~ ; exit") #reboots the pykiln
-            time.sleep(10.0) #wait for reboot
+            time.sleep(6.0) #wait for reboot
+
+            settings.GetIP()
 
             self.finish()
             return
