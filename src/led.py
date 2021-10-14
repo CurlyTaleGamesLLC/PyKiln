@@ -3,6 +3,9 @@ import mcp
 import uasyncio
 
 class led:
+    """
+    Allows PyKiln to flash status and error codes using the LED
+    """
 
     def __init__(self, ledDevice, i2cDevice=None):
         self.device = ledDevice.iodevice

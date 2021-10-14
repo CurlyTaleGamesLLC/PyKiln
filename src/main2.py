@@ -6,6 +6,7 @@ from device import device
 from led import *
 from relay import *
 from zones import *
+from temperature import *
 
 pyLed = None
 
@@ -18,10 +19,13 @@ def Start():
     print(dev.led.pin)
     print(dev.led.i2cAddress)
 
-    i2c = I2C(scl=dev.scl, sda=dev.sda, freq=10000)
+    i2c = I2C(scl=dev.scl, sda=dev.sda, freq=dev.freq)
     print(i2c.scan())
     if dev.ioexpander.iodevice == "MCP23008":
         io = mcp.MCP23008(i2c, dev.ioexpander.i2cAddress)
+
+    pyTemp = temperature(dev, i2c, "K", False)
+    print(pyTemp.ReadAllTemps())
 
     # LED - why is this blocking? this should be async
     pyLed = led(dev.led, io)

@@ -4,6 +4,9 @@ import mcp
 import uasyncio
 
 class speaker:
+    """
+    Allows PyKiln to beep out the status and error codes using the buzzer
+    """
 
     def __init__(self, speakerDevice, i2cDevice=None):
         self.device = speakerDevice.iodevice

@@ -1,47 +1,52 @@
-import uasyncio
-import max31856
-import settings
+from machine import Pin, I2C
+import adafruit_mcp9600
 
-pins = [4, 16, 17, 5]
-# change 17 to 32
-csPins = []
-count = 0
-for i in pins:
-    print(i)
-    if count < settings.data["kiln"]["sensors"]:
-        print("adding Temp " + str(i))
-        csPins.append(i)
-    count = count + 1
+class temperature:
+    """
+    Provides PyKiln with access to the temperature sensors. Thermocouple type and units are defined in the settings.json
+    """
 
-def GetTemperature():
-    print("Getting Temps")
-    uasyncio.create_task(GetTemps())
+    def __init__(self, dev, i2cDevice=None, thermocouple="K", isFahrenheit=False):
+        self.i2c = i2cDevice
+        self.tempDevices = dev.temps
+        self.sensors = []
+        self.temps = []
+        self.fahrenheit = isFahrenheit
 
-async def GetTemps():
-    global csPins
-    for i in csPins:
-        SensorTemp(i)
-        await uasyncio.sleep(0.5)
+        scan = self.i2c.scan()
+        print(scan)
 
-def SensorTemp(csPin):
-    # Connect to MAX31856
-    # csPin = 5
-    misoPin = 19
-    mosiPin = 23
-    clkPin = 18
-    max = max31856.max31856(csPin, misoPin, mosiPin, clkPin)
+        # Initialize all of the MCP9600 sensors and read the current temp
+        for i in range(len(self.tempDevices)):
+            if self.tempDevices[i].iodevice == "MCP9600" and self.tempDevices[i].i2cAddress in scan:
+                print(self.i2c)
+                print(self.tempDevices[i].i2cAddress)
+                print(thermocouple)
 
-    # Thermocouple Temp
-    thermoTempC = max.readThermocoupleTemp()
-    thermoTempF = (thermoTempC * 9.0/5.0) + 32
-    if settings.data["kiln"]["units"] == "fahrenheit":
-        print("Thermocouple Temp: %f degF" % thermoTempF)
-    else:
-        print("Thermocouple Temp: %f degC" % thermoTempC)
-    # Chip Temp
-    juncTempC = max.readJunctionTemp()
-    juncTempF = (juncTempC * 9.0/5.0) + 32
-    if settings.data["kiln"]["units"] == "fahrenheit":
-        print("Cold Junction Temp: %f degF" % juncTempF)
-    else:
-        print("Cold Junction Temp: %f degC" % juncTempC)
+                newSensor = adafruit_mcp9600.MCP9600(self.i2c, self.tempDevices[i].i2cAddress, thermocouple, 0)
+                self.sensors.append(newSensor)
+                self.temps.append(self.C2F(newSensor.temperature))
+
+                # checkSensor = adafruit_mcp9600.MCP9600(self.i2c, self.tempDevices[i].i2cAddress, thermocouple, 0)
+                # checkTemp = checkSensor.temperature
+                # if checkTemp != 0:
+                #     self.sensors.append(checkSensor)
+                #     self.temps.append(checkTemp)
+
+    def ReadTemp(self, i):
+        if self.tempDevices[i].iodevice == "MCP9600":
+            return self.C2F(self.sensors[i].temperature)
+        else:
+            print("Device not supported: " + self.tempDevices[i].iodevice)
+
+    def C2F(self, reading):
+        if self.fahrenheit:
+            return (reading * 9.0/5.0) + 32
+        else:
+            return reading
+
+
+    def ReadAllTemps(self):
+        for i in range(len(self.sensors)):
+            self.temps[i] = self.ReadTemp(i)
+        return self.temps

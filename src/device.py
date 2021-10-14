@@ -3,7 +3,7 @@ from iotype import iotype
 
 class device:
     """
-    Defines the pin mapping of PyKiln supported devices
+    Defines the pin mapping of PyKiln supported devices, currenly this is just the ESP32
     """
 
     def __init__(self, board):
@@ -16,6 +16,7 @@ class device:
         # #I2C pins
         self.sda = None
         self.scl = None
+        self.freq = None
 
         # #SPI SD Card Pins:
         self.sdo = None
@@ -34,10 +35,7 @@ class device:
         self.fan = None
 
         # Temperature Sensors
-        self.temp1 = None
-        self.temp2 = None
-        self.temp3 = None
-        self.temp4 = None
+        self.temps = []
 
         if board == "PyKilnV1.01":
             self.ESP32_MCP27008_MCP9600_v1_01()
@@ -53,6 +51,7 @@ class device:
         # #I2C pins
         self.sda = Pin(26)
         self.scl = Pin(25)
+        self.freq = 10000
 
         # #SPI SD Card Pins:
         # self.sdo = iotype("GPIO", Pin(23))
@@ -79,10 +78,11 @@ class device:
         # self.fan = iotype("MCP23008", 7, addr)
 
         # #Temperature Sensors
-        # self.temp1 = iotype("MCP9600", None, 96)
-        # self.temp2 = iotype("MCP9600", None, 96)
-        # self.temp3 = iotype("MCP9600", None, 96)
-        # self.temp4 = iotype("MCP9600", None, 96)
+        self.temps = []
+        self.temps.append(iotype("MCP9600", None, 96))
+        self.temps.append(iotype("MCP9600", None, 98))
+        self.temps.append(iotype("MCP9600", None, 101))
+        self.temps.append(iotype("MCP9600", None, 103))
         
 
 

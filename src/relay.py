@@ -1,11 +1,12 @@
 from machine import Pin, I2C
-# import machine
-# import uasyncio
-# import settings
 import mcp
 
-
 class relay:
+
+    """
+    Allows PyKiln to control the main power to the kiln. 
+    The relay is turned on at the start of a firing schedule and off at the end.
+    """
 
     def __init__(self, relayDevice, i2cDevice=None):
         self.relayDevice = relayDevice.iodevice

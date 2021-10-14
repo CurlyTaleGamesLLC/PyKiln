@@ -2,6 +2,9 @@ from machine import Pin, I2C
 import mcp
 
 class zones:
+    """
+    Allows PyKiln to control the heating zones in the kiln
+    """
 
     def __init__(self, dev, i2cDevice=None):
         self.i2c = i2cDevice
